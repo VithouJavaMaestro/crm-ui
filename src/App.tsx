@@ -2,9 +2,12 @@ import './App.css'
 import './__theme__/color.css';
 import {useEffect} from "react";
 import axios from "axios";
+import {useAppDispatch} from "./apps/hooks.ts";
+import {setToken} from "./apps/tokenSlice.ts";
+import {Dashboard} from "./page/Dashboard.tsx";
 
 function App() {
-
+    const useDispatch = useAppDispatch();
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const registrationId = "default";
@@ -21,17 +24,21 @@ function App() {
                 }
             })
                 .then(res => {
-                    console.log("Getting response")
-                    console.log(res);
+                    console.log(res.data);
+                    useDispatch(setToken({
+                        refreshToken: res.data['refresh_token'],
+                        accessToken: res.data['access_token']
+                    }))
                 }).catch(err => console.log(err));
         } else {
             window.location.href = "http://localhost:9000/login/default";
         }
     }, []);
 
+
     return (
         <>
-            <h1>Welcome home</h1>
+            <Dashboard/>
         </>
     )
 }
