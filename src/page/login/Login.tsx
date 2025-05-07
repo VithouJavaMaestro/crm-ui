@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {useState} from "react";
+import axios from 'axios';
 
 const Wrapper = styled.div`
     height: 100vh;
@@ -7,7 +8,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-blue-100);
+    background-color: var(--color-blue-300);
 `;
 
 const LoginCard = styled.div`
@@ -158,6 +159,9 @@ const ShowPwIcon = styled.button`
 export const Login = () => {
 
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+
+
     const [type, setType] = useState('password');
 
     const handleToggleShowPwd = () => {
@@ -170,7 +174,17 @@ export const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submit")
+        console.log(username + ":" + password)
+       axios.post("http://localhost:8080/login", new URLSearchParams({username, password}), {
+           withCredentials: true,
+           headers: {
+               'Content-Type': 'application/x-www-form-urlencoded',
+           }
+       }).then(res => {
+           console.log(res);
+       }).catch(err => {
+           console.log(err);
+       })
     }
 
     return (
@@ -186,7 +200,7 @@ export const Login = () => {
                 <FormWrapper onSubmit={handleSubmit}>
                     <div>
                         <InputLabel htmlFor="email">Email</InputLabel>
-                        <TextFieldInput type="email" id="email" name="email"/>
+                        <TextFieldInput type="text" id="email" name="email" onChange={event => setUsername(event.target.value)} />
                     </div>
                     <div style={{
                         position: 'relative',
