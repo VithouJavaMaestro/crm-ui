@@ -58,6 +58,7 @@ const MenuItemWrapper = styled.div<{ active: boolean }>`
     cursor: pointer;
     width: 100%;
     height: 50px;
+    margin-left: ${p => p.active ? "15px": "30px"} ;
     border-radius: 8px;
     padding-left: 10px;
     background: ${p => p.active ? "#B9EB8E" : "#FFFFF"};
@@ -87,7 +88,7 @@ const MenuItem = ({label, icon, path}: MenuItemProps) => {
             backgroundColor: 'red',
             height: 44,
             position: 'relative',
-        }} className={'slide-top'}> </div>}
+        }}> </div>}
         <MenuItemWrapper active={active} onClick={() => navigate(path)}>
             <img src={icon} alt={label} width={'20px'}/>
             <ItemTitle>{label}</ItemTitle>
