@@ -2,7 +2,8 @@ import {useAppDispatch, useAppSelector} from "./apps/hooks.ts";
 import {Outlet} from "react-router";
 import {useEffect, useState} from "react";
 import {setOAuth2Token, setUserPrincipal} from "./apps/slice/authentication.ts";
-import axios from "axios";
+import {oauth2Token} from "./api/authApi.ts";
+import {config} from "./env.ts";
 
 export const Secured = () => {
     const authentication = useAppSelector(state => state.authentication);
@@ -20,13 +21,7 @@ export const Secured = () => {
         const state = params.get("state");
 
         if (code && registrationId && state) {
-            axios.post("http://localhost:9000/token", null, {
-                params: {
-                    registration_id: registrationId,
-                    code: code,
-                    state: state
-                }
-            }).then(res => {
+            oauth2Token(code, registrationId, state).then(res => {
                 dispatch(setOAuth2Token({
                     accessToken: res.data.access_token,
                     refreshToken: res.data.refresh_token,
@@ -52,7 +47,7 @@ export const Secured = () => {
     if (authentication.authenticated) {
         return <Outlet/>;
     } else {
-        window.location.href = "http://localhost:9000/login/default";
+        window.location.href = config.VITE_API_BASE_URI + "/login/default";
         return null;
     }
 }

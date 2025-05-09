@@ -1,8 +1,3 @@
 export const Dashboard = () => {
-
-    return (
-        <div>
-            <h1>Welcome back</h1>
-        </div>
-    )
+    return <h1>Hello from dashboard</h1>
 }
