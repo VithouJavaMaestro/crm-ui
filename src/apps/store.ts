@@ -1,13 +1,15 @@
 import {configureStore} from "@reduxjs/toolkit";
-import tokenSlice from "./tokenSlice.ts";
+import {sliceReducer} from "./slice/authentication.ts";
 
 export const store = configureStore({
     reducer: {
-        token: tokenSlice
+        authentication: sliceReducer
     }
 })
 
-export type AppStore = typeof store;
-export type RootState = ReturnType<AppStore['getState']>;
-export type Dispatch = typeof store.dispatch;
+export type AppState = typeof store.getState;
+
+export type AppStore = ReturnType<AppState>;
+
+export type AppDispatch = typeof store.dispatch;
 

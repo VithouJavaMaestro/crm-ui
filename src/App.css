@@ -1,5 +1,12 @@
 * {
-    font-family: 'Poppins';
+    font-family: 'Poppins', sans-serif;
     padding: 0;
     margin: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "Nico Moji";
+    src: url("./assets/fonts/NicoMoji-Regular.ttf") format("opentype");
 }
