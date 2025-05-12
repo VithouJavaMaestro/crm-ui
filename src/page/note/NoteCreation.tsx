@@ -1,12 +1,14 @@
-import Modal from "react-modal";
+import Modal, {Styles} from "react-modal";
 import styled from "styled-components";
 import cancelIcon from "../../../public/cancel.svg";
 import {Stack} from "../Stack.tsx";
-import {createNoteApi} from "../../api/noteApi.ts";
+import {Close, CloseContainer} from "../../utils/modal.ts";
+import {Object} from "../../utils/shared.ts";
 
-const customStyles = {
+export const modalStyle = (props?: Styles): Styles => ({
     overlay: {
-        backgroundColor: 'rgb(213,214,215,0.5)'
+        backgroundColor: 'rgb(213,214,215,0.5)',
+        ...(props?.overlay || {})
     },
     content: {
         top: '50%',
@@ -20,27 +22,11 @@ const customStyles = {
         backgroundColor: '#FFFF',
         padding: 30,
         border: "1px solid #E8E9EB",
-        borderRadius: 20
+        borderRadius: 20,
+        ...(props?.content || {})
     },
-};
+});
 
-const CloseContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-`
-
-const Close = styled.div`
-    width: 30px;
-    height: 30px;
-    background-color: #F8F8F8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 10px;
-`;
 
 const AddNoteLabel = styled.label`
     font-style: normal;
@@ -69,6 +55,8 @@ const NoteTextArea = styled.textarea`
     height: 173px;
     border-radius: 12px;
     padding: 10px;
+    resize: none;
+    scrollbar-width: thin;
 
     &:focus {
         border: 1px solid #2C8D46;
@@ -103,21 +91,20 @@ const CreateNoteButtonText = styled.span`
 interface NoteModalProps {
     open: boolean;
     onClose: () => void;
-    onOpen: () => void;
 }
 
 export const NoteCreation = (props: NoteModalProps) => {
 
-    const handleCreateNote = (event) => {
+    const handleCreateNote = (event: Object) => {
         event.preventDefault();
-        createNoteApi({
-            description: "Hello world",
-            title: "Hello from boy thou"
-        }).finally(() => props.onClose());
+        // createNoteApi({
+        //     description: "Hello world",
+        //     title: "Hello from boy thou"
+        // }).finally(() => props.onClose());
     }
 
     return (
-        <Modal isOpen={props.open} style={customStyles} onRequestClose={props.onClose} onAfterOpen={props.onOpen}>
+        <Modal isOpen={props.open} style={modalStyle()} onRequestClose={props.onClose}>
             <Stack space={20}>
                 <CloseContainer>
                     <Close onClick={props.onClose}>

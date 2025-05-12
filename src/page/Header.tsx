@@ -3,6 +3,10 @@ import menuIcon from "../../public/menu.svg";
 import searchIcon from "../../public/search.svg";
 import reminderIcon from "../../public/reminder.svg";
 import profile from "../../public/flower.svg";
+import {useDispatch} from "react-redux";
+import {expandSidebar} from "../apps/slice/action.ts";
+import {useAppSelector} from "../apps/hooks.ts";
+import {useState} from "react";
 
 
 const HeaderContainer = styled.div`
@@ -22,9 +26,16 @@ const Divider = styled.div`
 
 
 export const Header = () => {
+    const dispatch = useDispatch();
+    const action = useAppSelector(state => state.action);
+    const [click, setClick] = useState(false);
     return <HeaderContainer>
         <img src={menuIcon} alt="" style={{
             alignSelf: "center",
+            cursor: 'pointer',
+        }} onClick={() => {
+            dispatch(expandSidebar(!action.expandedSidebar))
+            setClick(!click);
         }}/>
         <div style={{
             display: 'flex',

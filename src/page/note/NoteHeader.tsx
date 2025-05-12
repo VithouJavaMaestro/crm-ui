@@ -45,9 +45,9 @@ const AddNoteButtonText = styled.span`
     color: #FFFFFF;
 `;
 
+
 export const NoteHeader = () => {
     const [open, setOpen] = useState(false);
-
     return <>
         <NoteCreation open={open} onClose={() => setOpen(false)}/>
         <Box justify={'space-between'}>

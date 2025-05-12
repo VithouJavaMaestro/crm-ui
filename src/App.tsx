@@ -3,8 +3,9 @@ import './__theme__/color.css';
 import {Layout} from "./page/Layout.tsx";
 import {Route, Routes} from "react-router";
 import {Secured} from "./Secured.tsx";
-import {Dashboard} from "./page/Dashboard.tsx";
+import {Dashboard} from "./page/dashboard/Dashboard.tsx";
 import {NoteLayout} from "./page/note/NoteLayout.tsx";
+import {Ecommerce} from "./page/ecommerce/Ecommerce.tsx";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                     <Route path='/' element={<Layout/>}>
                         <Route index={true} element={<Dashboard/>}/>
                         <Route path={'/note'} element={<NoteLayout/>}/>
+                        <Route path={"/ecommerce"} element={<Ecommerce/>}/>
                     </Route>
                 </Route>
             </Routes>

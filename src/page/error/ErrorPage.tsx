@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import backIcon from "../../public/back.svg";
+import backIcon from "../../../public/back.svg";
 
 const ErrorContainer = styled.div`
     width: 100vw;
@@ -79,8 +79,8 @@ export const ErrorPage = ({error}: { error: Error & { status: number } }) => {
             flexDirection: 'column',
             alignItems: 'center'
         }}>
-            <ErrorTitle>{errorMessage.title}</ErrorTitle>
-            <ErrorDescription>{errorMessage.description}</ErrorDescription>
+            <ErrorTitle>{errorMessage?.title}</ErrorTitle>
+            <ErrorDescription>{errorMessage?.description}</ErrorDescription>
         </div>
         <BackHome onClick={() => window.location.href = "/"}>
             <img src={backIcon} alt="back"/>

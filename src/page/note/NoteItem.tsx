@@ -1,10 +1,10 @@
 import dateIcon from "../../../public/date.svg";
 import pushpinIcon from "../../../public/pushpin.svg";
 import styled from "styled-components";
+import {NoteModification} from "./NoteModification.tsx";
+import React from "react";
 
 const NoteItemContainer = styled.div`
-    width: 400px;
-    height: 350px;
     background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
@@ -33,24 +33,33 @@ const NoteDescriptionContainer = styled.div`
     padding-right: 30px;
     display: flex;
     flex-direction: column;
-`
+`;
+
 
 export const NoteItem = () => {
-    return <NoteItemContainer>
-        <NoteIcon/>
-        <NoteItemHeader>
-            <NoteDateContainer>
-                <img src={dateIcon} alt="date"/>
-                <p>12 June, 2020</p>
-            </NoteDateContainer>
-            <img src={pushpinIcon} alt="pushpin"/>
-        </NoteItemHeader>
-        <NoteDescriptionContainer>
-            <h4>The title of a note</h4>
-            <p>Lorem ipsum dolor sit amet, ullamcous cididunt consectetur adipiscing elit, seds do et eiusmod
-                tempor
-                incididunt ut laborels dolore magnarels aliqua. Ut enim ad nesid utminim veniam, quis nostrud eiusmo
-                exercitation ullamco labori is amco commodo consequat seds eiusmod.</p>
-        </NoteDescriptionContainer>
-    </NoteItemContainer>
+    const [open, setOpen] = React.useState(false);
+    return <>
+        <NoteModification open={open} onClose={() => setOpen(false)}/>
+        <NoteItemContainer>
+            <NoteIcon/>
+            <NoteItemHeader>
+                <NoteDateContainer>
+                    <img src={dateIcon} alt="date"/>
+                    <p>12 June, 2020</p>
+                </NoteDateContainer>
+
+                <img src={pushpinIcon} alt="pushpin" style={{
+                    cursor: "pointer"
+                }} onClick={() => setOpen(true)}/>
+            </NoteItemHeader>
+            <NoteDescriptionContainer style={{
+                paddingBottom: 30,
+            }}>
+                <h4>The title of a note</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias architecto asperiores blanditiis cum. Accusantium aperiam at aut, autem consequuntur cupiditate eos et exercitationem incidunt molestias, natus nemo recusandae repudiandae saepe voluptatum. Ad at beatae consequatur dolorum fuga illo libero magnam modi, molestias nobis obcaecati officia, quaerat quasi quo ratione reiciendis, sapiente tempora vero voluptas voluptates? A architecto commodi, corporis cumque distinctio est hic illum itaque modi quasi quod vitae? Adipisci consectetur, non odio possimus sit velit voluptates. Ab adipisci architecto, at consectetur cum dicta dolores dolorum et, eveniet ex exercitationem in, inventore iure nam natus sint tenetur veritatis voluptatem.
+                </p>
+            </NoteDescriptionContainer>
+        </NoteItemContainer>
+    </>
 }

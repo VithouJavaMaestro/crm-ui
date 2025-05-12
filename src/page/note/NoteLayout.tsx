@@ -12,8 +12,8 @@ const NoteContainer = styled.div`
 
 const NoteItemContainer = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 `
 
 export const NoteLayout = () => {

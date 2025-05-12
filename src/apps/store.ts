@@ -1,9 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {sliceReducer} from "./slice/authentication.ts";
+import {actionReducer} from "./slice/action.ts";
 
 export const store = configureStore({
     reducer: {
-        authentication: sliceReducer
+        authentication: sliceReducer,
+        action: actionReducer
     }
 })
 
