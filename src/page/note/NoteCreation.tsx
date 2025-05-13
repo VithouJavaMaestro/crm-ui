@@ -6,7 +6,7 @@ import {Close, CloseContainer} from "../../utils/modal.ts";
 import {createNoteApi, NoteRepresentation} from "../../api/aNoteApi.ts";
 import {useEffect, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {doFetchNode, fetchNode} from "../../apps/fetchSlice.ts";
+import {doFetchNode} from "../../apps/fetchSlice.ts";
 import {useAppDispatch} from "../../apps/hooks.ts";
 
 
