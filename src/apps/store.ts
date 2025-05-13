@@ -1,11 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
-import {sliceReducer} from "./slice/authentication.ts";
 import {actionReducer} from "./slice/action.ts";
+import {fetchReducer} from "./fetchSlice.ts";
 
 export const store = configureStore({
     reducer: {
-        authentication: sliceReducer,
-        action: actionReducer
+        action: actionReducer,
+        fetch: fetchReducer
     }
 })
 

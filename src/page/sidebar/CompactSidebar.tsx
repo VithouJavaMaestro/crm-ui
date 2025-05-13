@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import flower from "../../../public/flower.svg";
-import dashboardIcon from "../../../public/dashboard.svg";
-import ecommerceIcon from "../../../public/ecommerce.svg";
-import calenderIcon from "../../../public/calender.svg";
-import mailIcon from "../../../public/mail.svg";
-import chatIcon from "../../../public/chat.svg";
-import taskIcon from "../../../public/task.svg";
-import fileManagerIcon from "../../../public/filemanager.svg";
-import noteIcon from "../../../public/note.svg";
-import contactIcon from "../../../public/contact.svg";
+import flower from "../../assets/flower.svg";
+import dashboardIcon from "../../assets/dashboard.svg";
+import ecommerceIcon from "../../assets/ecommerce.svg";
+import calenderIcon from "../../assets/calender.svg";
+import mailIcon from "../../assets/mail.svg";
+import chatIcon from "../../assets/chat.svg";
+import taskIcon from "../../assets/task.svg";
+import fileManagerIcon from "../../assets/filemanager.svg";
+import noteIcon from "../../assets/note.svg";
+import contactIcon from "../../assets/contact.svg";
 import {useLocation, useNavigate} from "react-router";
 import {Tooltip} from "react-tooltip";
 

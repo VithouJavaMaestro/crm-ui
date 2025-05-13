@@ -1,13 +1,89 @@
 import styled from "styled-components";
-import editIcon from "../../../public/edit.svg";
-import deleteIcon from "../../../public/delete.svg";
-import optionIcon from "../../../public/options.svg";
-import cancelIcon from "../../../public/cancel.svg";
-import {Close, CloseContainer, ModalProps} from "../../utils/modal.ts";
+import editIcon from "../../assets/edit.svg";
+import deleteIcon from "../../assets/delete.svg";
+import cancelIcon from "../../assets/cancel.svg";
+import {CloseContainer, ModalProps} from "../../utils/modal.ts";
 import Modal, {Styles} from "react-modal";
-import dateIcon from "../../../public/date.svg";
-import menuIcon from "../../../public/menu.svg";
-import {useState} from "react";
+import dateIcon from "../../assets/date.svg";
+import menuIcon from "../../assets/menu.svg";
+import {useCallback, useLayoutEffect, useMemo, useState} from "react";
+
+const defineText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.";
+
+export const NoteModification = (props: ModalProps) => {
+
+    const [action, setAction] = useState(Mode.VIEW);
+
+
+    return (
+        <Modal isOpen={props.open} style={modalStyle()} onRequestClose={props.onClose}>
+            <Header>
+                <IconContainer>
+                    <ModeContainer>
+                        <Clickable src={editIcon} alt="edit" onClick={() => setAction(Mode.EDIT)} width={20}/>
+                        <Clickable src={deleteIcon} alt="delete" onClick={() => setAction(Mode.DELETE)} width={20}/>
+                    </ModeContainer>
+                    <CloseContainer>
+                        <Clickable src={cancelIcon} onClick={() => props.onClose()} width={12}/>
+                    </CloseContainer>
+                </IconContainer>
+            </Header>
+            {(action === Mode.VIEW || action === Mode.EDIT) && <Content>
+                <TitleNoteContainer>
+                    <Topic>
+                        <Color/>
+                        {action === Mode.VIEW ? (
+                            <NoteTitle>The title of a note</NoteTitle>
+                        ) : action === Mode.EDIT && (
+                            <NoteInput id={'title'} type={'text'} defaultValue={'The title of a note'}/>
+                        )}
+                    </Topic>
+                    <Topic>
+                        <img src={dateIcon} alt="date"/>
+                        <DateTitle>12 June, 2020</DateTitle>
+                    </Topic>
+                </TitleNoteContainer>
+                <DescriptionContainer>
+                    <img src={menuIcon} alt={"menu"} width={20} height={20}/>
+                    {action === Mode.VIEW ? (
+                        <Description>
+                            {defineText}
+                        </Description>
+                    ) : action === Mode.EDIT && (
+                        <NoteTextArea id={'description'} placeholder={"Type something"} defaultValue={defineText}/>
+                    )}
+
+                </DescriptionContainer>
+            </Content>}
+            {action === Mode.DELETE && (
+                <>
+                    <DeleteTitle>Are you sure you want to delete this note?</DeleteTitle>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: 20
+                    }}>
+                        <Button color={'#f10721'} onClick={() => setAction(Mode.VIEW)}>
+                            <ButtonText>Cancel</ButtonText>
+                        </Button>
+                        <Button color={'#21943A'}>
+                            <ButtonText>Confirm</ButtonText>
+                        </Button>
+                    </div>
+                </>
+            )}
+            {action === Mode.EDIT && (
+                <DeleteButtonContainer>
+                    <Button color={'#f10721'} onClick={() => setAction(Mode.VIEW)}>
+                        <ButtonText>Cancel</ButtonText>
+                    </Button>
+                    <Button color={'#21943A'}>
+                        <ButtonText>Save</ButtonText>
+                    </Button>
+                </DeleteButtonContainer>)}
+        </Modal>
+    )
+}
 
 const Header = styled.div`
     display: flex;
@@ -17,9 +93,16 @@ const Header = styled.div`
 const IconContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    gap: 30px
 `;
 
-export const modalStyle = (props?: Styles): Styles =>( {
+const ModeContainer = styled.div`
+    align-self: center;
+    display: flex;
+    gap: 16px
+`
+
+export const modalStyle = (props?: Styles): Styles => ({
     overlay: {
         backgroundColor: 'rgb(213,214,215,0.5)',
         ...(props?.overlay || {})
@@ -107,9 +190,9 @@ const NoteTextArea = styled.textarea`
     border-radius: 12px;
     padding: 10px;
     resize: none;
-    
+
     overflow-y: scroll;
-    
+
     scrollbar-width: thin;
 
     &:focus {
@@ -149,91 +232,18 @@ const ButtonText = styled.div`
     color: #FFFFFF;
 `;
 
-enum Action {
-    edit, view, remove,
+const Mode = {
+    VIEW: "view",
+    EDIT: "edit",
+    DELETE: "delete",
+};
 
-}
+const DeleteTitle = styled.span`
+    text-align: center;
+`;
 
-
-const defineText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.";
-
-export const NoteModification = (props: ModalProps) => {
-
-
-    const [action, setAction] = useState<Action>(Action.view)
-
-    return (
-        <Modal isOpen={props.open} style={modalStyle()} onRequestClose={props.onClose}>
-                <Header>
-                    <IconContainer style={{
-                        gap: 30
-                    }}>
-                        <div style={{
-                            alignSelf: 'center',
-                            display: 'flex',
-                            gap: 16
-                        }}>
-                            <Clickable src={editIcon} alt="edit" onClick={()=> setAction(Action.edit)} />
-                            <Clickable src={deleteIcon} alt="delete" onClick={()=> setAction(Action.remove)} />
-                            <Clickable src={optionIcon} alt="optionIcon" onClick={() => setAction(Action.view)}/>
-                        </div>
-                        <div>
-                            <CloseContainer>
-                                <Close onClick={() => {
-                                    props.onClose();
-                                }}>
-                                    <img src={cancelIcon} alt=""/>
-                                </Close>
-                            </CloseContainer>
-                        </div>
-                    </IconContainer>
-                </Header>
-            {action !== Action.remove && <Content>
-                    <TitleNoteContainer>
-                        <Topic>
-                            <Color/>
-                            {action === Action.view ? (
-                                <NoteTitle>The title of a note</NoteTitle>
-                            ): action === Action.edit && (
-                                <NoteInput id={'title'} type={'text'} defaultValue={'The title of a note'}/>
-                            )}
-                        </Topic>
-                        <Topic>
-                            <img src={dateIcon} alt="date"/>
-                            <DateTitle>12 June, 2020</DateTitle>
-                        </Topic>
-                    </TitleNoteContainer>
-                    <DescriptionContainer>
-                        <img src={menuIcon} alt={"menu"} width={20} height={20}/>
-                        {action === Action.view ? (
-                            <Description>
-                                {defineText}
-                            </Description>
-                        ): action === Action.edit && (
-                            <NoteTextArea  id={'description'} placeholder={"Type something"} defaultValue={defineText}/>
-                        ) }
-
-                    </DescriptionContainer>
-                </Content>}
-            {action === Action.remove && (
-                <>
-                <span style={{
-                    textAlign: 'center'
-                }}>Are you sure you want to delete this note?</span>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        gap: 20
-                    }}>
-                        <Button color={'#f10721'} onClick={() => setAction(Action.view)}>
-                            <ButtonText>Cancel</ButtonText>
-                        </Button>
-                        <Button color={'#21943A'}>
-                            <ButtonText>Confirm</ButtonText>
-                        </Button>
-                    </div>
-                </>
-            )}
-        </Modal>
-    )
-}
+const DeleteButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px
+`;

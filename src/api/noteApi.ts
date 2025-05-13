@@ -1,22 +1,23 @@
-import axios from "axios";
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query";
 import {config} from "../env.ts";
-import {store} from "../apps/store.ts";
+import {NoteRepresentation} from "./aNoteApi.ts";
 
-const noteApi = axios.create(({
-    baseURL: config.VITE_NOTE_SERVER_URI + "/api"
-}));
-
-noteApi.interceptors.request.use(config => {
-    const authentication = store.getState().authentication;
-    config.headers.setAuthorization(`Bearer ${authentication.accessToken}`);
-    return config;
+export const noteApi = createApi({
+    reducerPath: "noteApi",
+    baseQuery: fetchBaseQuery({
+        baseUrl: config.VITE_NOTE_SERVER_URI
+    }),
+    endpoints: (builder) => ({
+        createNoteApi: builder.mutation<void, NoteRepresentation>({
+            query: (note) => ({
+                url: `api/notes`,
+                method: 'POST',
+                body: note
+            })
+        })
+    })
 });
 
-interface NoteCreation {
-    title: string,
-    description: string
-}
-
-export const createNoteApi = async (note: NoteCreation) => {
-    return await noteApi.post("/notes", note);
-}
+export const {
+    useCreateNoteApi
+} = noteApi;

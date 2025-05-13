@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import backIcon from "../../../public/back.svg";
+import backIcon from "../../assets/back.svg";
 
 const ErrorContainer = styled.div`
     width: 100vw;

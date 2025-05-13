@@ -1,7 +1,12 @@
 import {Stack} from "../Stack.tsx";
-import {NoteItem} from "./NoteItem.tsx";
 import {NoteHeader} from "./NoteHeader.tsx";
 import styled from "styled-components";
+import {useEffect, useState} from "react";
+import {getNotesApi, NoteRepresentation} from "../../api/aNoteApi.ts";
+import {AxiosResponse} from "axios";
+import {Pagination} from "../../utils/pagination.ts";
+import {NoteItem} from "./NoteItem.tsx";
+import {useAppSelector} from "../../apps/hooks.ts";
 
 const NoteContainer = styled.div`
     width: 100%;
@@ -17,6 +22,18 @@ const NoteItemContainer = styled.div`
 `
 
 export const NoteLayout = () => {
+
+    const [noteItems, setNoteItems] = useState<Pagination<NoteRepresentation>>();
+
+    const fetch = useAppSelector(state => state.fetch);
+
+    useEffect(() => {
+        getNotesApi()
+            .then((value: AxiosResponse<Pagination<NoteRepresentation>>) => {
+                setNoteItems(value.data);
+            });
+    }, [fetch.fetchNote]);
+
     return <NoteContainer>
         <Stack style={{
             padding: 20,
@@ -24,40 +41,12 @@ export const NoteLayout = () => {
         }}>
             <NoteHeader/>
             <NoteItemContainer>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
-                <NoteItem/>
+                {noteItems?.items.map((item, index) => {
+                    return (
+                        <NoteItem {...item} key={index}/>
+                    )
+                })}
             </NoteItemContainer>
         </Stack>
     </NoteContainer>
-
 }

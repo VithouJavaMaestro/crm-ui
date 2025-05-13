@@ -4,8 +4,8 @@ import {Layout} from "./page/Layout.tsx";
 import {Route, Routes} from "react-router";
 import {Secured} from "./Secured.tsx";
 import {Dashboard} from "./page/dashboard/Dashboard.tsx";
-import {NoteLayout} from "./page/note/NoteLayout.tsx";
 import {Ecommerce} from "./page/ecommerce/Ecommerce.tsx";
+import {NoteLayout} from "./page/note/NoteLayout.tsx";
 
 function App() {
     return (

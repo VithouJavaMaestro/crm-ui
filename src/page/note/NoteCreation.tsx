@@ -1,9 +1,84 @@
 import Modal, {Styles} from "react-modal";
 import styled from "styled-components";
-import cancelIcon from "../../../public/cancel.svg";
+import cancelIcon from "../../assets/cancel.svg";
 import {Stack} from "../Stack.tsx";
 import {Close, CloseContainer} from "../../utils/modal.ts";
-import {Object} from "../../utils/shared.ts";
+import {createNoteApi, NoteRepresentation} from "../../api/aNoteApi.ts";
+import {useEffect, useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {doFetchNode, fetchNode} from "../../apps/fetchSlice.ts";
+import {useAppDispatch} from "../../apps/hooks.ts";
+
+
+export const NoteCreation = (props: NoteModalProps) => {
+
+
+    const [loading, setLoading] = useState(false);
+
+    const dispatch = useAppDispatch();
+
+    const handleCreateNote: SubmitHandler<NoteRepresentation> = (data: NoteRepresentation) => {
+        setLoading(true);
+        createNoteApi(data).catch(reason => {
+            console.log(reason);
+        }).finally(() => {
+            setLoading(false);
+            props.onClose();
+            dispatch(doFetchNode());
+        });
+    }
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+    } = useForm<NoteRepresentation>();
+
+
+    useEffect(() => {
+        Modal.setAppElement("#root");
+        reset();
+    }, [props.open]);
+
+    return (
+        <Modal isOpen={props.open} style={modalStyle()} onRequestClose={props.onClose} ariaHideApp={false}
+               shouldCloseOnEsc={false} shouldReturnFocusAfterClose={false}>
+            <Stack space={20}>
+                <CloseContainer>
+                    <Close onClick={props.onClose}>
+                        <img src={cancelIcon} alt=""/>
+                    </Close>
+                </CloseContainer>
+                <AddNoteForm>
+                    <div>
+                        <AddNoteLabel htmlFor={'title'}>
+                            Title
+                        </AddNoteLabel>
+                        <NoteInput id={'title'} type={'text'} {...register("title", {
+                            required: true
+                        })}/>
+                    </div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}>
+                        <AddNoteLabel htmlFor={'description'}>
+                            Description
+                        </AddNoteLabel>
+                        <NoteTextArea id={'description'} placeholder={"Type something"} {...register("description", {
+                            required: true
+                        })}/>
+                    </div>
+                    <CreateNoteButton onClick={handleSubmit(handleCreateNote)}>
+                        {loading ? <Loading/> :
+                            <CreateNoteButtonText>Create</CreateNoteButtonText>}
+                    </CreateNoteButton>
+                </AddNoteForm>
+            </Stack>
+        </Modal>
+    )
+}
+
 
 export const modalStyle = (props?: Styles): Styles => ({
     overlay: {
@@ -63,7 +138,7 @@ const NoteTextArea = styled.textarea`
     }
 `;
 
-const AddNoteForm = styled.form`
+const AddNoteForm = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -86,52 +161,30 @@ const CreateNoteButtonText = styled.span`
     font-weight: 500;
     font-size: 15px;
     color: #FFFFFF;
+`;
+
+
+const Loading = styled.div`
+    width: 28px;
+    height: 28px;
+    border: 3px solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 `
 
 interface NoteModalProps {
     open: boolean;
     onClose: () => void;
-}
-
-export const NoteCreation = (props: NoteModalProps) => {
-
-    const handleCreateNote = (event: Object) => {
-        event.preventDefault();
-        // createNoteApi({
-        //     description: "Hello world",
-        //     title: "Hello from boy thou"
-        // }).finally(() => props.onClose());
-    }
-
-    return (
-        <Modal isOpen={props.open} style={modalStyle()} onRequestClose={props.onClose}>
-            <Stack space={20}>
-                <CloseContainer>
-                    <Close onClick={props.onClose}>
-                        <img src={cancelIcon} alt=""/>
-                    </Close>
-                </CloseContainer>
-                <AddNoteForm>
-                    <div>
-                        <AddNoteLabel htmlFor={'title'}>
-                            Title
-                        </AddNoteLabel>
-                        <NoteInput id={'title'} type={'text'}/>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
-                        <AddNoteLabel htmlFor={'description'}>
-                            Description
-                        </AddNoteLabel>
-                        <NoteTextArea id={'description'} placeholder={"Type something"}/>
-                    </div>
-                </AddNoteForm>
-                <CreateNoteButton onClick={handleCreateNote}>
-                    <CreateNoteButtonText>Create</CreateNoteButtonText>
-                </CreateNoteButton>
-            </Stack>
-        </Modal>
-    )
 }

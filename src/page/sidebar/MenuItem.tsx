@@ -1,12 +1,12 @@
 import {useLocation, useNavigate} from "react-router";
-import navigateIcon from "../../../public/navigate.svg";
+import navigateIcon from "../../assets/navigate.svg";
 import styled from "styled-components";
 import {MenuItemProps} from "../../utils/menuItem.ts";
 import React, {useState} from "react";
-import selectIcon from "../../../public/select.svg";
+import selectIcon from "../../assets/select.svg";
 import {Object} from "../../utils/shared.ts";
 
-const MenuItemContainer = styled.div<{ active: boolean }>`
+const MenuItemContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
@@ -14,11 +14,8 @@ const MenuItemContainer = styled.div<{ active: boolean }>`
     justify-content: space-between;
     width: 100%;
     height: 50px;
-    margin-left: ${p => p.active ? 10 : 20}px;
-    border-radius: 8px;
-    padding-left: ${p => p.active ? 10 : 0}px;
     padding-right: 10px;
-    background: ${(p) => (p.active ? "#B9EB8E" : "transparent")};
+    border-radius: 8px;
 `;
 
 const ActiveIndicator = styled.div`
@@ -77,8 +74,12 @@ export const MenuItem = ({label, icon, path, options, action}: MenuItemProps) =>
         <div onClick={action}>
             <div style={{display: "flex"}} onClick={handleClickDropdown}>
                 {active && <ActiveIndicator/>}
-                <MenuItemContainer active={active} onClick={() => {
+                <MenuItemContainer onClick={() => {
                     navigate(path);
+                }} style={{
+                    marginLeft: active ? 10 : 20,
+                    paddingLeft: active ? 10 : 0,
+                    background: active ? "#B9EB8E" : "transparent"
                 }} >
                     <div style={{
                         display: 'flex',

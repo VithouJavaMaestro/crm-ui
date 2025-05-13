@@ -1,9 +1,30 @@
 import {Box} from "../Box.tsx";
-import filter from "../../../public/filter.svg";
-import addIcon from "../../../public/add.svg";
+import filter from "../../assets/filter.svg";
+import addIcon from "../../assets/add.svg";
 import styled from "styled-components";
 import {NoteCreation} from "./NoteCreation.tsx";
 import {useState} from "react";
+
+export const NoteHeader = () => {
+    const [open, setOpen] = useState(false);
+    return <>
+        <NoteCreation open={open} onClose={() => setOpen(false)}/>
+        <Box justify={'space-between'}>
+            <HeaderTitle>
+                Notes
+            </HeaderTitle>
+            <Box space={30}>
+                <FilterButton>
+                    <img src={filter} alt="filter"/>
+                </FilterButton>
+                <AddNoteButton onClick={() => setOpen(true)}>
+                    <img src={addIcon} alt=""/>
+                    <AddNoteButtonText>Add Note</AddNoteButtonText>
+                </AddNoteButton>
+            </Box>
+        </Box>
+    </>
+}
 
 const HeaderTitle = styled.h4`
     font-style: normal;
@@ -44,25 +65,3 @@ const AddNoteButtonText = styled.span`
     font-size: 15px;
     color: #FFFFFF;
 `;
-
-
-export const NoteHeader = () => {
-    const [open, setOpen] = useState(false);
-    return <>
-        <NoteCreation open={open} onClose={() => setOpen(false)}/>
-        <Box justify={'space-between'}>
-            <HeaderTitle>
-                Notes
-            </HeaderTitle>
-            <Box space={30}>
-                <FilterButton>
-                    <img src={filter} alt="filter"/>
-                </FilterButton>
-                <AddNoteButton onClick={() => setOpen(true)}>
-                    <img src={addIcon} alt=""/>
-                    <AddNoteButtonText>Add Note</AddNoteButtonText>
-                </AddNoteButton>
-            </Box>
-        </Box>
-    </>
-}

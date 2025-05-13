@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import logo from "../../../public/flower.svg";
+import logo from "../../assets/flower.svg";
 import {MenuItem} from "./MenuItem.tsx";
 import {menuItems} from "../../utils/menuItem.ts";
 // Styled Components
@@ -28,7 +28,7 @@ const LogoText = styled.h4`
 const SearchInput = styled.input`
     border-radius: 6px;
     background-color: #f5f5f5;
-    background-image: url("../../../public/search.svg");
+    background-image: url("../../assets/search.svg");
     background-repeat: no-repeat;
     background-position: 10px center;
     box-sizing: border-box;
