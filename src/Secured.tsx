@@ -1,38 +1,23 @@
-import {Outlet} from "react-router";
 import {useEffect, useState} from "react";
-import {useErrorBoundary} from "react-error-boundary";
-import {getOAuth2AccessToken} from "./api/authApi.ts";
 import {CODE_CHALLENGE, CODE_VERIFIER} from "./page/constants/oidc.ts";
-import {setToken} from "./worker/tokenWorker.ts";
 import {sendRedirect} from "./utils/redirect.ts";
+import {useGetOAuth2AccessTokenMutation} from "./api/authApi.ts";
+import {Outlet} from "react-router";
+import {setToken} from "./worker/tokenWorker.ts";
+import {useErrorBoundary} from "react-error-boundary";
 
 export const Secured = () => {
 
+    const [trigger, {isLoading}] = useGetOAuth2AccessTokenMutation();
 
-    const [loading, setLoading] = useState(true);
+    const [authReady, setAuthReady] = useState(false);
+
     const {showBoundary} = useErrorBoundary();
-
-    const [authenticated, setAuthenticated] = useState(false);
-
-    const [error, setError] = useState({
-        status: 500,
-        message: "Something went wrong.",
-        hasError: false
-    });
 
 
     useEffect(() => {
+        console.log(isLoading);
         const params = new URLSearchParams(window.location.search);
-
-        if (params.has("error")) {
-            setError({
-                status: 500,
-                message: "Not working at all.",
-                hasError: true
-            });
-            setLoading(false);
-            return;
-        }
 
         const code = params.get("code");
 
@@ -42,49 +27,41 @@ export const Secured = () => {
             const codeChallenge = sessionStorage.getItem(CODE_CHALLENGE);
 
             if (!(codeChallenge && codeVerifier)) {
-                setLoading(false);
-                setError({...error, status: 403, hasError: true});
+                showBoundary({
+                    message: "Something went wrong",
+                })
                 return;
             }
 
             const cleanUrl = window.location.origin + window.location.pathname;
             window.history.replaceState({}, "", cleanUrl);
 
-            getOAuth2AccessToken({
+
+            trigger({
                 clientId: "crm",
                 code: code,
                 codeChallenge: codeChallenge,
                 codeVerifier: codeVerifier
-            }).then((res) => {
-                setAuthenticated(true);
-                const data = res.data;
-                setToken({
-                    accessToken: data.access_token,
-                    refreshToken: data.refresh_token,
-                    expiresIn: data.expires_in,
-                });
-            }).catch(err => {
-                console.log(err);
-                setError({hasError: true, message: err.message, status: err.status});
-            }).finally(() => setLoading(false));
-
+            }).unwrap()
+                .then(data => {
+                    console.log(data.refreshToken)
+                    setToken(data);
+                    setAuthReady(true);
+                }).catch(error => {
+                showBoundary(error);
+            });
+        } else if (params.has("error")) {
+            showBoundary({
+                message: "Something went wrong.",
+            });
         } else {
-            setLoading(false);
+            sendRedirect();
         }
     }, []);
 
-    if (loading) {
-        return <p>Loading...</p>
+    if (!authReady) {
+        return null;
     }
 
-    if (authenticated) {
-        return <Outlet/>;
-    } else {
-        if (error.hasError) {
-            showBoundary(error);
-        } else {
-            sendRedirect();
-            return null;
-        }
-    }
+    return <Outlet/>
 }

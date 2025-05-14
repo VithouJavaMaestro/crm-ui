@@ -3,29 +3,19 @@ import styled from "styled-components";
 import cancelIcon from "../../assets/cancel.svg";
 import {Stack} from "../Stack.tsx";
 import {Close, CloseContainer} from "../../utils/modal.ts";
-import {createNoteApi, NoteRepresentation} from "../../api/aNoteApi.ts";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {doFetchNode} from "../../apps/fetchSlice.ts";
-import {useAppDispatch} from "../../apps/hooks.ts";
+import {useCreateNoteMutation} from "../../api/noteApi.ts";
+import {NoteRepresentation} from "../../model/note.ts";
 
 
 export const NoteCreation = (props: NoteModalProps) => {
 
+    const [createNote, {isLoading}] = useCreateNoteMutation();
 
-    const [loading, setLoading] = useState(false);
-
-    const dispatch = useAppDispatch();
-
-    const handleCreateNote: SubmitHandler<NoteRepresentation> = (data: NoteRepresentation) => {
-        setLoading(true);
-        createNoteApi(data).catch(reason => {
-            console.log(reason);
-        }).finally(() => {
-            setLoading(false);
-            props.onClose();
-            dispatch(doFetchNode());
-        });
+    const handleCreateNote: SubmitHandler<NoteRepresentation> = async (data: NoteRepresentation) => {
+        await createNote(data).unwrap();
+        props.onClose();
     }
 
     const {
@@ -55,8 +45,8 @@ export const NoteCreation = (props: NoteModalProps) => {
                             Title
                         </AddNoteLabel>
                         <NoteInput id={'title'} type={'text'} {...register("title", {
-                            required: true
-                        })}/>
+                            required: true,
+                        })} maxLength={100}/>
                     </div>
                     <div style={{
                         display: 'flex',
@@ -70,7 +60,7 @@ export const NoteCreation = (props: NoteModalProps) => {
                         })}/>
                     </div>
                     <CreateNoteButton onClick={handleSubmit(handleCreateNote)}>
-                        {loading ? <Loading/> :
+                        {isLoading ? <Loading/> :
                             <CreateNoteButtonText>Create</CreateNoteButtonText>}
                     </CreateNoteButton>
                 </AddNoteForm>

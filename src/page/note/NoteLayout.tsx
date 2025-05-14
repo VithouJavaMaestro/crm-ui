@@ -1,12 +1,8 @@
 import {Stack} from "../Stack.tsx";
 import {NoteHeader} from "./NoteHeader.tsx";
 import styled from "styled-components";
-import {useEffect, useState} from "react";
-import {getNotesApi, NoteRepresentation} from "../../api/aNoteApi.ts";
-import {AxiosResponse} from "axios";
-import {Pagination} from "../../utils/pagination.ts";
 import {NoteItem} from "./NoteItem.tsx";
-import {useAppSelector} from "../../apps/hooks.ts";
+import {useGetNotesQuery} from "../../api/noteApi.ts";
 
 const NoteContainer = styled.div`
     width: 100%;
@@ -23,16 +19,11 @@ const NoteItemContainer = styled.div`
 
 export const NoteLayout = () => {
 
-    const [noteItems, setNoteItems] = useState<Pagination<NoteRepresentation>>();
+    const {data, isLoading} = useGetNotesQuery();
 
-    const fetch = useAppSelector(state => state.fetch);
-
-    useEffect(() => {
-        getNotesApi()
-            .then((value: AxiosResponse<Pagination<NoteRepresentation>>) => {
-                setNoteItems(value.data);
-            });
-    }, [fetch.fetchNote]);
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
 
     return <NoteContainer>
         <Stack style={{
@@ -41,7 +32,7 @@ export const NoteLayout = () => {
         }}>
             <NoteHeader/>
             <NoteItemContainer>
-                {noteItems?.items.map((item, index) => {
+                {data?.map((item, index) => {
                     return (
                         <NoteItem {...item} key={index}/>
                     )

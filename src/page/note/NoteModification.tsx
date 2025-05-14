@@ -7,16 +7,26 @@ import Modal, {Styles} from "react-modal";
 import dateIcon from "../../assets/date.svg";
 import menuIcon from "../../assets/menu.svg";
 import {useState} from "react";
+import {useGetNoteQuery} from "../../api/noteApi.ts";
 
-const defineText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda atque consequuntur culpa deserunt dicta dolor dolorem ducimus enim error facere fugiat, illo in nisi placeat possimus quasi reprehenderit sint voluptatum.";
+export const NoteModification = ({props, id}: { props: ModalProps, id: number }) => {
 
-export const NoteModification = (props: ModalProps) => {
+    console.log("Call me")
 
     const [action, setAction] = useState(Mode.VIEW);
 
+    const {data, isLoading} = useGetNoteQuery(id);
+
+    if (isLoading) {
+        return;
+    }
 
     return (
-        <Modal isOpen={props.open} style={modalStyle()} onRequestClose={props.onClose}>
+        <Modal isOpen={props.open} style={modalStyle({
+            content: {
+                overflowX: 'hidden'
+            }
+        })} onRequestClose={props.onClose}>
             <Header>
                 <IconContainer>
                     <ModeContainer>
@@ -30,27 +40,32 @@ export const NoteModification = (props: ModalProps) => {
             </Header>
             {(action === Mode.VIEW || action === Mode.EDIT) && <Content>
                 <TitleNoteContainer>
-                    <Topic>
-                        <Color/>
+                    <Topic className={"title"}>
+                        <div style={{
+                            alignSelf: "center",
+                        }}>
+                            <Color/>
+                        </div>
                         {action === Mode.VIEW ? (
-                            <NoteTitle>The title of a note</NoteTitle>
+                            <NoteTitle>{data?.title}</NoteTitle>
                         ) : action === Mode.EDIT && (
-                            <NoteInput id={'title'} type={'text'} defaultValue={'The title of a note'}/>
+                            <NoteInput id={'title'} type={'text'} defaultValue={data?.title}/>
                         )}
                     </Topic>
                     <Topic>
                         <img src={dateIcon} alt="date"/>
-                        <DateTitle>12 June, 2020</DateTitle>
+                        <DateTitle>{data?.createdAt}</DateTitle>
                     </Topic>
                 </TitleNoteContainer>
                 <DescriptionContainer>
                     <img src={menuIcon} alt={"menu"} width={20} height={20}/>
                     {action === Mode.VIEW ? (
                         <Description>
-                            {defineText}
+                            {data?.description}
                         </Description>
                     ) : action === Mode.EDIT && (
-                        <NoteTextArea id={'description'} placeholder={"Type something"} defaultValue={defineText}/>
+                        <NoteTextArea id={'description'} placeholder={"Type something"}
+                                      defaultValue={data?.description}/>
                     )}
 
                 </DescriptionContainer>
@@ -150,6 +165,9 @@ const NoteTitle = styled.span`
     font-weight: 500;
     font-size: 20px;
     color: #3F434A;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
 `
 
 const DateTitle = styled.span`
@@ -175,11 +193,16 @@ const Description = styled.span`
     font-size: 14px;
     color: #595F69;
     align-self: center;
+    word-break: break-word;
+    max-height: 50vh;
+    overflow-x: hidden;
+    scrollbar-width: thin;
 `;
 
 const DescriptionContainer = styled.div`
     display: flex;
     gap: 10px;
+    padding-right: 10px;
 `;
 
 const NoteTextArea = styled.textarea`
@@ -190,9 +213,6 @@ const NoteTextArea = styled.textarea`
     border-radius: 12px;
     padding: 10px;
     resize: none;
-
-    overflow-y: scroll;
-
     scrollbar-width: thin;
 
     &:focus {
