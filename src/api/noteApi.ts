@@ -72,6 +72,14 @@ export const noteApi = createApi({
             query: (id: number) => ({
                 url: `/api/notes/${id}`,
             }),
+        }),
+        updateNote: builder.mutation<void, NoteRepresentation>({
+            query: (note) => ({
+                url: "/api/notes",
+                method: "PUT",
+                body: note,
+            }),
+            invalidatesTags: [{type: "Note", id: "LIST"}]
         })
     })
 });
@@ -79,5 +87,6 @@ export const noteApi = createApi({
 export const {
     useCreateNoteMutation,
     useGetNotesQuery,
-    useGetNoteQuery
+    useGetNoteQuery,
+    useUpdateNoteMutation
 } = noteApi;

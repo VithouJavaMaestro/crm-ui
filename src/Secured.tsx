@@ -44,7 +44,6 @@ export const Secured = () => {
                 codeVerifier: codeVerifier
             }).unwrap()
                 .then(data => {
-                    console.log(data.refreshToken)
                     setToken(data);
                     setAuthReady(true);
                 }).catch(error => {

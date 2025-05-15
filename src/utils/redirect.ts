@@ -21,6 +21,7 @@ export const sendRedirect = () => {
             url.searchParams.append(CODE_CHALLENGE, value);
             sessionStorage.setItem(CODE_VERIFIER, codeVerifier);
             sessionStorage.setItem(CODE_CHALLENGE, value);
+            console.log(url.toString());
             window.location.href = url.toString();
         })
 }
