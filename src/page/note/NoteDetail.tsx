@@ -2,14 +2,67 @@ import styled from "styled-components";
 import editIcon from "../../assets/edit.svg";
 import deleteIcon from "../../assets/delete.svg";
 import cancelIcon from "../../assets/cancel.svg";
+import saveIcon from "../../assets/save.svg";
 import {CloseContainer, ModalProps} from "../../utils/modal.ts";
 import Modal, {Styles} from "react-modal";
 import dateIcon from "../../assets/date.svg";
 import menuIcon from "../../assets/menu.svg";
 import {useState} from "react";
 import {useGetNoteQuery} from "../../api/noteApi.ts";
+import {NoteRepresentation} from "../../model/note.ts";
+import backIcon from "../../assets/back.svg";
 
-export const NoteModification = ({props, id}: { props: ModalProps, id: number }) => {
+const NoteContentDetail = (data: NoteRepresentation) => {
+    return <Content>
+        <TitleNoteContainer>
+            <Topic className={"title"}>
+                <div style={{
+                    alignSelf: "center",
+                }}>
+                    <Color/>
+                </div>
+                    <NoteTitle>{data?.title}</NoteTitle>
+            </Topic>
+            <Topic>
+                <img src={dateIcon} alt="date"/>
+                <DateTitle>{data?.createdAt}</DateTitle>
+            </Topic>
+        </TitleNoteContainer>
+        <DescriptionContainer>
+            <img src={menuIcon} alt={"menu"} width={20} height={20}/>
+                <Description>
+                    {data?.description}
+                </Description>
+        </DescriptionContainer>
+    </Content>
+}
+
+const NoteDetailEdit = (data: NoteRepresentation) => {
+    return <Content>
+        <TitleNoteContainer>
+            <Topic className={"title"}>
+                <div style={{
+                    alignSelf: "center",
+                }}>
+                    <Color/>
+                </div>
+                <NoteInput id={'title'} type={'text'} defaultValue={data?.title}/>
+            </Topic>
+            <Topic>
+                <img src={dateIcon} alt="date"/>
+                <DateTitle>{data?.createdAt}</DateTitle>
+            </Topic>
+        </TitleNoteContainer>
+        <DescriptionContainer>
+            <img src={menuIcon} alt={"menu"} width={20} height={20}/>
+
+            <NoteTextArea id={'description'} placeholder={"Type something"}
+                          defaultValue={data?.description}/>
+        </DescriptionContainer>
+    </Content>
+}
+
+export const NoteDetail = ({props, id}: { props: ModalProps, id: number }) => {
 
     console.log("Call me")
 
@@ -28,6 +81,13 @@ export const NoteModification = ({props, id}: { props: ModalProps, id: number })
             }
         })} onRequestClose={props.onClose}>
             <Header>
+                <div style={{
+                    display: 'flex',
+                    gap: 20
+                }}>
+                    <Clickable src={cancelIcon} alt="" width={18}/>
+                    <Clickable src={saveIcon} alt="" height={18}/>
+                </div>
                 <IconContainer>
                     <ModeContainer>
                         <Clickable src={editIcon} alt="edit" onClick={() => setAction(Mode.EDIT)} width={20}/>
@@ -38,38 +98,7 @@ export const NoteModification = ({props, id}: { props: ModalProps, id: number })
                     </CloseContainer>
                 </IconContainer>
             </Header>
-            {(action === Mode.VIEW || action === Mode.EDIT) && <Content>
-                <TitleNoteContainer>
-                    <Topic className={"title"}>
-                        <div style={{
-                            alignSelf: "center",
-                        }}>
-                            <Color/>
-                        </div>
-                        {action === Mode.VIEW ? (
-                            <NoteTitle>{data?.title}</NoteTitle>
-                        ) : action === Mode.EDIT && (
-                            <NoteInput id={'title'} type={'text'} defaultValue={data?.title}/>
-                        )}
-                    </Topic>
-                    <Topic>
-                        <img src={dateIcon} alt="date"/>
-                        <DateTitle>{data?.createdAt}</DateTitle>
-                    </Topic>
-                </TitleNoteContainer>
-                <DescriptionContainer>
-                    <img src={menuIcon} alt={"menu"} width={20} height={20}/>
-                    {action === Mode.VIEW ? (
-                        <Description>
-                            {data?.description}
-                        </Description>
-                    ) : action === Mode.EDIT && (
-                        <NoteTextArea id={'description'} placeholder={"Type something"}
-                                      defaultValue={data?.description}/>
-                    )}
-
-                </DescriptionContainer>
-            </Content>}
+            {action === Mode.VIEW ? <NoteContentDetail {...data}/> : <NoteDetailEdit {...data}/>}
             {action === Mode.DELETE && (
                 <>
                     <DeleteTitle>Are you sure you want to delete this note?</DeleteTitle>
@@ -87,27 +116,17 @@ export const NoteModification = ({props, id}: { props: ModalProps, id: number })
                     </div>
                 </>
             )}
-            {action === Mode.EDIT && (
-                <DeleteButtonContainer>
-                    <Button color={'#f10721'} onClick={() => setAction(Mode.VIEW)}>
-                        <ButtonText>Cancel</ButtonText>
-                    </Button>
-                    <Button color={'#21943A'}>
-                        <ButtonText>Save</ButtonText>
-                    </Button>
-                </DeleteButtonContainer>)}
         </Modal>
     )
 }
 
 const Header = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 `;
 
 const IconContainer = styled.div`
     display: flex;
-    justify-content: space-between;
     gap: 30px
 `;
 
@@ -208,12 +227,12 @@ const DescriptionContainer = styled.div`
 const NoteTextArea = styled.textarea`
     border: 1px solid #E8E9EB;
     outline: none;
-    width: 450px;
     height: 173px;
     border-radius: 12px;
     padding: 10px;
     resize: none;
     scrollbar-width: thin;
+    width: 100%;
 
     &:focus {
         border: 1px solid #2C8D46;
@@ -221,12 +240,12 @@ const NoteTextArea = styled.textarea`
 `;
 
 const NoteInput = styled.input`
-    width: 300px;
     height: 30px;
     outline: none;
     border-radius: 12px;
     padding: 10px;
     border: 1px solid #E8E9EB;
+    width: 100%;
 
     &:focus {
         border: 1px solid #2C8D46;
@@ -262,8 +281,3 @@ const DeleteTitle = styled.span`
     text-align: center;
 `;
 
-const DeleteButtonContainer = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px
-`;

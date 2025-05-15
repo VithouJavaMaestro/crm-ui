@@ -46,7 +46,7 @@ export const NoteCreation = (props: NoteModalProps) => {
                         </AddNoteLabel>
                         <NoteInput id={'title'} type={'text'} {...register("title", {
                             required: true,
-                        })} maxLength={100}/>
+                        })}/>
                     </div>
                     <div style={{
                         display: 'flex',

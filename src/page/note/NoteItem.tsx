@@ -1,7 +1,7 @@
 import dateIcon from "../../assets/date.svg";
 import pushpinIcon from "../../assets/pushpin.svg";
 import styled from "styled-components";
-import {NoteModification} from "./NoteModification.tsx";
+import {NoteDetail} from "./NoteDetail.tsx";
 import React from "react";
 import {NoteRepresentation} from "../../model/note.ts";
 import noteIcon from "../../assets/noteIcon.svg";
@@ -10,7 +10,7 @@ export const NoteItem = (note: NoteRepresentation) => {
     const [open, setOpen] = React.useState(false);
 
     return <>
-        {open && <NoteModification props={{
+        {open && <NoteDetail props={{
             open: open,
             onClose: () => setOpen(false),
         }} id={note.id ?? 0}/>}
