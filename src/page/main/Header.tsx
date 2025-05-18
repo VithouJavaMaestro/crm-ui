@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import menuIcon from "../assets/menu.svg";
-import searchIcon from "../assets/search.svg";
-import reminderIcon from "../assets/reminder.svg";
-import profile from "../assets/flower.svg";
+import menuIcon from "../../assets/menu.svg";
+import searchIcon from "../../assets/search.svg";
+import reminderIcon from "../../assets/reminder.svg";
 import {useDispatch} from "react-redux";
-import {expandSidebar} from "../apps/slice/action.ts";
-import {useAppSelector} from "../apps/hooks.ts";
+import {expandSidebar} from "../../apps/slice/action.ts";
+import {useAppSelector} from "../../apps/hooks.ts";
 import {useState} from "react";
+import {Avatar} from "../../component/Avatar.tsx";
+import vithou from "../../assets/vithou.jpg";
 
 
 const HeaderContainer = styled.div`
@@ -48,7 +49,9 @@ export const Header = () => {
                 alignSelf: "center",
             }}/>
             <Divider/>
-            <img src={profile} alt="" width={50}/>
+            <Avatar src={vithou} alt="" width={50} style={{
+                alignSelf: 'center'
+            }}/>
             <h4 style={{
                 alignSelf: "center"
             }}>Vithou Then</h4>

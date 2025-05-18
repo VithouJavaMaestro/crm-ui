@@ -1,14 +1,17 @@
-import {Stack} from "../Stack.tsx";
+import {Stack} from "../../component/Stack.tsx";
 import {NoteHeader} from "./NoteHeader.tsx";
 import styled from "styled-components";
 import {NoteItem} from "./NoteItem.tsx";
 import {useGetNotesQuery} from "../../api/noteApi.ts";
+import {Loader} from "../../component/Loader.tsx";
 
 const NoteContainer = styled.div`
     width: 100%;
     height: 100vh;
     background-color: #F5F5F5;
     overflow: scroll;
+    scrollbar-width: thin;
+    overflow-x: hidden;
 `;
 
 const NoteItemContainer = styled.div`
@@ -19,10 +22,10 @@ const NoteItemContainer = styled.div`
 
 export const NoteLayout = () => {
 
-    const {data, isLoading} = useGetNotesQuery();
+    const {data, isFetching} = useGetNotesQuery();
 
-    if (isLoading) {
-        return <div>Loading...</div>
+    if (isFetching) {
+        return <Loader open={true}/>
     }
 
     return <NoteContainer>

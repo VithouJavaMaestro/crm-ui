@@ -1,66 +1,41 @@
+import {useLazyGetUserInfoQuery, UserPrinciple} from "./api/oauth2ServerApi.ts";
 import {useEffect, useState} from "react";
-import {CODE_CHALLENGE, CODE_VERIFIER} from "./page/constants/oidc.ts";
-import {sendRedirect} from "./utils/redirect.ts";
-import {useGetOAuth2AccessTokenMutation} from "./api/authApi.ts";
+import {Loader} from "./component/Loader.tsx";
 import {Outlet} from "react-router";
-import {setToken} from "./worker/tokenWorker.ts";
-import {useErrorBoundary} from "react-error-boundary";
+import {sendRedirect} from "./utils/redirect.ts";
 
 export const Secured = () => {
 
-    const [trigger, {isLoading}] = useGetOAuth2AccessTokenMutation();
+    const [getUserInfo, {isFetching}] = useLazyGetUserInfoQuery();
 
-    const [authReady, setAuthReady] = useState(false);
-
-    const {showBoundary} = useErrorBoundary();
+    const [authenticated, setAuthenticated] = useState(false);
 
 
     useEffect(() => {
-        console.log(isLoading);
-        const params = new URLSearchParams(window.location.search);
-
-        const code = params.get("code");
-
-        if (code) {
-
-            const codeVerifier = sessionStorage.getItem(CODE_VERIFIER);
-            const codeChallenge = sessionStorage.getItem(CODE_CHALLENGE);
-
-            if (!(codeChallenge && codeVerifier)) {
-                showBoundary({
-                    message: "Something went wrong",
-                })
-                return;
+        getUserInfo()
+            .unwrap()
+            .then((response: UserPrinciple) => {
+                if (response && response.sub) {
+                    localStorage.setItem("auth_state", "authenticated");
+                    setAuthenticated(true);
+                }
+            }).catch(() => {
+            let authState = localStorage.getItem("auth_state");
+            if (authState !== "login") {
+                // to prevent infinite redirect
+                localStorage.setItem("auth_state", "login");
+                sendRedirect();
             }
+        })
 
-            const cleanUrl = window.location.origin + window.location.pathname;
-            window.history.replaceState({}, "", cleanUrl);
-
-
-            trigger({
-                clientId: "crm",
-                code: code,
-                codeChallenge: codeChallenge,
-                codeVerifier: codeVerifier
-            }).unwrap()
-                .then(data => {
-                    setToken(data);
-                    setAuthReady(true);
-                }).catch(error => {
-                showBoundary(error);
-            });
-        } else if (params.has("error")) {
-            showBoundary({
-                message: "Something went wrong.",
-            });
-        } else {
-            sendRedirect();
-        }
     }, []);
 
-    if (!authReady) {
-        return null;
+    if (isFetching) {
+        return <Loader open={true}/>;
     }
 
-    return <Outlet/>
+
+    if (authenticated) {
+        return <Outlet/>
+    }
 }

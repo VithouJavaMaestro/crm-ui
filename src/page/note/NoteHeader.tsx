@@ -1,4 +1,4 @@
-import {Box} from "../Box.tsx";
+import {Box} from "../../component/Box.tsx";
 import filter from "../../assets/filter.svg";
 import addIcon from "../../assets/add.svg";
 import styled from "styled-components";

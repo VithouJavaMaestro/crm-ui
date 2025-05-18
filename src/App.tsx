@@ -1,6 +1,6 @@
 import './App.css'
 import './__theme__/color.css';
-import {Layout} from "./page/Layout.tsx";
+import {Layout} from "./page/main/Layout.tsx";
 import {Route, Routes} from "react-router";
 import {Secured} from "./Secured.tsx";
 import {Dashboard} from "./page/dashboard/Dashboard.tsx";

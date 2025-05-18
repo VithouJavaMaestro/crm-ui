@@ -1,9 +1,7 @@
-import {Sidebar} from "./sidebar/Sidebar.tsx";
 import styled from "styled-components";
 import {Outlet} from "react-router";
 import {Header} from "./Header.tsx";
-import {CompactSidebar} from "./sidebar/CompactSidebar.tsx";
-import {useAppSelector} from "../apps/hooks.ts";
+import {CompactSidebar} from "../sidebar/CompactSidebar.tsx";
 
 const Container = styled.div`
     display: flex;
@@ -20,14 +18,9 @@ const Content = styled.div`
 
 
 export const Layout = () => {
-    const action = useAppSelector(state => state.action);
     return (
         <Container>
-            {action.expandedSidebar ? (
-                <Sidebar />
-            ) : (
-                <CompactSidebar/>
-            )}
+            <CompactSidebar/>
             <Content>
                 <Header/>
                 <Outlet/>

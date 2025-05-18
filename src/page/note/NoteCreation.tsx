@@ -1,7 +1,7 @@
 import Modal, {Styles} from "react-modal";
 import styled from "styled-components";
 import cancelIcon from "../../assets/cancel.svg";
-import {Stack} from "../Stack.tsx";
+import {Stack} from "../../component/Stack.tsx";
 import {Close, CloseContainer} from "../../utils/modal.ts";
 import {useEffect} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";

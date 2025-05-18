@@ -8,7 +8,6 @@ import {
     DateTitle,
     DescriptionContainer,
     Header,
-    ModeContainer,
     NoteInput,
     NoteTextArea,
     TitleNoteContainer,
@@ -44,10 +43,14 @@ export const NoteDetailEdit = ({data, setMode, closeModal}: {
 
     return <>
         <Header>
-            <ModeContainer>
+            <div style={{
+                display: "flex",
+                gap: 30,
+                justifyContent: "flex-end"
+            }}>
                 <Clickable src={cancelIcon} alt="" width={20} onClick={setMode}/>
                 <Clickable src={saveIcon} alt="" height={20} onClick={handleSubmit(onSubmit)}/>
-            </ModeContainer>
+            </div>
         </Header>
         <Content>
             <TitleNoteContainer>

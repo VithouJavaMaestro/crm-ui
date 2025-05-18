@@ -20,30 +20,17 @@ export const NoteDetail = ({props, id}: { props: ModalProps, id: number }) => {
     return (
         <Modal isOpen={props.open} style={modalStyle({
             content: {
-                overflowX: 'hidden'
+                overflowX: 'hidden',
+                borderColor: action === Mode.DELETE ? "red" : "transparent"
             }
         })} onRequestClose={props.onClose}>
-            {action === Mode.VIEW ? <NoteContentDetail data={data} clickCancel={() => props.onClose()}
-                                                       clickDelete={() => setAction(Mode.DELETE)}
-                                                       clickEdit={() => setAction(Mode.EDIT)}/> :
+            {action === Mode.VIEW || action == Mode.DELETE ?
+                <NoteContentDetail data={data} clickCancel={() => props.onClose()}
+                                   clickDelete={() => setAction(Mode.DELETE)}
+                                   clickEdit={() => setAction(Mode.EDIT)} mode={action}
+                                   setMode={() => setAction(Mode.VIEW)}/> :
+                action === Mode.EDIT &&
                 <NoteDetailEdit data={data} setMode={() => setAction(Mode.VIEW)} closeModal={props.onClose}/>}
-            {/*{action === Mode.DELETE && (*/}
-            {/*    <>*/}
-            {/*        <DeleteTitle>Are you sure you want to delete this note?</DeleteTitle>*/}
-            {/*        <div style={{*/}
-            {/*            display: 'flex',*/}
-            {/*            justifyContent: 'flex-end',*/}
-            {/*            gap: 20*/}
-            {/*        }}>*/}
-            {/*            <Button color={'#f10721'} onClick={() => setAction(Mode.VIEW)}>*/}
-            {/*                <ButtonText>Cancel</ButtonText>*/}
-            {/*            </Button>*/}
-            {/*            <Button color={'#21943A'}>*/}
-            {/*                <ButtonText>Confirm</ButtonText>*/}
-            {/*            </Button>*/}
-            {/*        </div>*/}
-            {/*    </>*/}
-            {/*)}*/}
         </Modal>
     )
 }

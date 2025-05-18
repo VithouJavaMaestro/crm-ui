@@ -1,6 +1,7 @@
 import {NoteRepresentation} from "../../model/note.ts";
 import dateIcon from "../../assets/date.svg";
 import menuIcon from "../../assets/menu.svg";
+
 import {
     Clickable,
     Color,
@@ -10,6 +11,7 @@ import {
     DescriptionContainer,
     Header,
     IconContainer,
+    Mode,
     ModeContainer,
     NoteTitle,
     TitleNoteContainer,
@@ -19,23 +21,37 @@ import editIcon from "../../assets/edit.svg";
 import deleteIcon from "../../assets/delete.svg";
 import {CloseContainer} from "../../utils/modal.ts";
 import cancelIcon from "../../assets/cancel.svg";
+import saveIcon from "../../assets/save.svg";
+import {useDeleteNoteMutation} from "../../api/noteApi.ts";
 
-export const NoteContentDetail = ({data, clickEdit, clickDelete, clickCancel}: {
+export const NoteContentDetail = ({data, clickEdit, clickDelete, clickCancel, mode, setMode}: {
     data?: NoteRepresentation,
     clickEdit: () => void,
     clickDelete: () => void,
-    clickCancel: () => void
+    clickCancel: () => void,
+    mode: string,
+    setMode: () => void
 }) => {
+
+    const [trigger] = useDeleteNoteMutation();
+
     return <>
         <Header>
             <IconContainer>
-                <ModeContainer>
+                {mode === Mode.VIEW && <><ModeContainer>
                     <Clickable src={editIcon} alt="edit" onClick={clickEdit} width={20}/>
                     <Clickable src={deleteIcon} alt="delete" onClick={clickDelete} width={20}/>
-                </ModeContainer>
-                <CloseContainer>
+                </ModeContainer><CloseContainer>
                     <Clickable src={cancelIcon} onClick={clickCancel} width={20}/>
-                </CloseContainer>
+                </CloseContainer></>}
+                {mode === Mode.DELETE && <>
+                    <Clickable src={cancelIcon} alt="" width={20} onClick={setMode}/>
+                    <Clickable src={saveIcon} alt="" height={20} onClick={() => {
+                        trigger(data?.id ?? 0);
+                        clickCancel();
+                    }}/>
+                </>
+                }
             </IconContainer>
         </Header>
         <Content>
