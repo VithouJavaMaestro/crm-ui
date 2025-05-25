@@ -5,9 +5,8 @@ import {CompactSidebar} from "../sidebar/CompactSidebar.tsx";
 
 const Container = styled.div`
     display: flex;
-    width: 100vw;
-    height: 100vh;
-    transition: opacity 0.4s ease;
+
+    scrollbar-width: thin;
 `;
 
 const Content = styled.div`
@@ -19,12 +18,21 @@ const Content = styled.div`
 
 export const Layout = () => {
     return (
-        <Container>
-            <CompactSidebar/>
-            <Content>
-                <Header/>
-                <Outlet/>
-            </Content>
-        </Container>
+        <div style={{
+            width: "100vw",
+            height: "100vh",
+            overflow: 'hidden'
+        }}>
+
+            <Container>
+
+                <CompactSidebar/>
+                <Content>
+                    <Header/>
+                    <Outlet/>
+                </Content>
+            </Container>
+        </div>
+
     )
 }

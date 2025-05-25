@@ -19,7 +19,8 @@ export const oauth2ServerApi = createApi({
             query: () => ({
                 url: "/userinfo",
             })
-        })
+        }),
+
     })
 })
 

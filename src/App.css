@@ -134,3 +134,7 @@
     align-items: center;
     justify-content: center;
 }
+
+.remove-scroll {
+    overflow: hidden;
+}

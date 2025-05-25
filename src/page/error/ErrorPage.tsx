@@ -82,7 +82,10 @@ export const ErrorPage = ({error}: { error: Error & { status: number } }) => {
             <ErrorTitle>{errorMessage?.title}</ErrorTitle>
             <ErrorDescription>{errorMessage?.description}</ErrorDescription>
         </div>
-        <BackHome onClick={() => window.location.href = "/"}>
+        <BackHome onClick={() => {
+            window.location.href = "/";
+            localStorage.setItem("auth_state", "home");
+        }}>
             <img src={backIcon} alt="back"/>
             <BackHomeText>Back to Home</BackHomeText>
         </BackHome>

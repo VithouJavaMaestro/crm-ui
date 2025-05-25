@@ -3,6 +3,7 @@ import {actionReducer} from "./slice/action.ts";
 import {fetchReducer} from "./fetchSlice.ts";
 import {noteApi} from "../api/noteApi.ts";
 import {oauth2ServerApi} from "../api/oauth2ServerApi.ts";
+import {gatewayApi} from "../api/gatewayApi.ts";
 
 export const store = configureStore({
     reducer: {
@@ -10,9 +11,10 @@ export const store = configureStore({
         fetch: fetchReducer,
         [noteApi.reducerPath]: noteApi.reducer,
         [oauth2ServerApi.reducerPath]: oauth2ServerApi.reducer,
+        [gatewayApi.reducerPath]: gatewayApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(noteApi.middleware).concat(oauth2ServerApi.middleware),
+        getDefaultMiddleware().concat(noteApi.middleware).concat(oauth2ServerApi.middleware).concat(gatewayApi.middleware),
 })
 
 export type AppState = typeof store.getState;

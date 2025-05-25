@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {Loader} from "./component/Loader.tsx";
 import {Outlet} from "react-router";
 import {sendRedirect} from "./utils/redirect.ts";
+import {useErrorBoundary} from "react-error-boundary";
 
 export const Secured = () => {
 
@@ -10,6 +11,7 @@ export const Secured = () => {
 
     const [authenticated, setAuthenticated] = useState(false);
 
+    const {showBoundary} = useErrorBoundary();
 
     useEffect(() => {
         getUserInfo()
@@ -19,12 +21,13 @@ export const Secured = () => {
                     localStorage.setItem("auth_state", "authenticated");
                     setAuthenticated(true);
                 }
-            }).catch(() => {
-            let authState = localStorage.getItem("auth_state");
-            if (authState !== "login") {
-                // to prevent infinite redirect
-                localStorage.setItem("auth_state", "login");
+            }).catch((error) => {
+            if (error.status === 401) {
                 sendRedirect();
+            } else {
+                showBoundary({
+                    status: 500,
+                })
             }
         })
 
