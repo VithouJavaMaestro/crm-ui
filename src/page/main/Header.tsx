@@ -123,9 +123,9 @@ const ProfileContainer = styled.div`
     height: auto;
     position: absolute;
     right: 10px;
-    top: 50px;
+    top: 60px;
     border-radius: 20px;
-    border: 3px solid #F5F5F5;
+    border: 1px solid #F5F5F5;
     background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
