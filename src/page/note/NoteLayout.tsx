@@ -29,29 +29,33 @@ const NoteItemContainer = styled.div`
 
 export const NoteLayout = () => {
 
-    const {data, isFetching} = useGetNotesQuery();
+    const {currentData, isFetching} = useGetNotesQuery();
 
-    if (isFetching) {
-        return <Loader open={true}/>
-    }
 
-    return <NoteCard>
-        <NoteContainer>
-            <LinearProgress open={true}/>
-            <Stack style={{
-                padding: 20,
-                gap: 20
-            }}>
-                <NoteHeader/>
-                <NoteItemContainer>
-                    {data?.map((item, index) => {
-                        return (
-                            <NoteItem {...item} key={index}/>
-                        )
-                    })}
-                </NoteItemContainer>
-            </Stack>
-        </NoteContainer>
-    </NoteCard>
+    return <>
+        {
+            (isFetching) && <Loader open={true}/>
+        }
+        <NoteCard>
+
+            <NoteContainer>
+                <LinearProgress open={true}/>
+                <Stack style={{
+                    padding: 20,
+                    gap: 20
+                }}>
+                    <NoteHeader/>
+                    <NoteItemContainer>
+                        {currentData?.map((item, index) => {
+                            return (
+                                <NoteItem {...item} key={index}/>
+                            )
+                        })}
+                    </NoteItemContainer>
+                </Stack>
+            </NoteContainer>
+        </NoteCard>
+    </>
+
 
 }

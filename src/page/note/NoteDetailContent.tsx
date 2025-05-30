@@ -19,19 +19,22 @@ import {
 } from "./NoteDetail.tsx";
 import editIcon from "../../assets/edit.svg";
 import deleteIcon from "../../assets/delete.svg";
-import {CloseContainer} from "../../utils/modal.ts";
+import {CloseContainer, ModalProps} from "../../utils/modal.ts";
 import cancelIcon from "../../assets/cancel.svg";
 import saveIcon from "../../assets/save.svg";
 import {useDeleteNoteMutation} from "../../api/noteApi.ts";
+import React from "react";
 
-export const NoteContentDetail = ({data, clickEdit, clickDelete, clickCancel, mode, setMode}: {
-    data?: NoteRepresentation,
-    clickEdit: () => void,
-    clickDelete: () => void,
-    clickCancel: () => void,
+export interface NoteDetailContentProps {
+    data: NoteRepresentation,
     mode: string,
-    setMode: () => void
-}) => {
+    setMode: React.Dispatch<React.SetStateAction<string>>;
+    modal: ModalProps
+}
+
+export const NoteDetailContent = (props: NoteDetailContentProps) => {
+
+    const {data, mode, setMode, modal} = props;
 
     const [trigger] = useDeleteNoteMutation();
 
@@ -39,16 +42,16 @@ export const NoteContentDetail = ({data, clickEdit, clickDelete, clickCancel, mo
         <Header>
             <IconContainer>
                 {mode === Mode.VIEW && <><ModeContainer>
-                    <Clickable src={editIcon} alt="edit" onClick={clickEdit} width={20}/>
-                    <Clickable src={deleteIcon} alt="delete" onClick={clickDelete} width={20}/>
+                    <Clickable src={editIcon} alt="edit" onClick={() => setMode(Mode.EDIT)} width={20}/>
+                    <Clickable src={deleteIcon} alt="delete" onClick={() => setMode(Mode.DELETE)} width={20}/>
                 </ModeContainer><CloseContainer>
-                    <Clickable src={cancelIcon} onClick={clickCancel} width={20}/>
+                    <Clickable src={cancelIcon} onClick={modal.onClose} width={20}/>
                 </CloseContainer></>}
                 {mode === Mode.DELETE && <>
-                    <Clickable src={cancelIcon} alt="" width={20} onClick={setMode}/>
+                    <Clickable src={cancelIcon} alt="" width={20} onClick={() => setMode(Mode.VIEW)}/>
                     <Clickable src={saveIcon} alt="" height={20} onClick={() => {
-                        trigger(data?.id ?? 0);
-                        clickCancel();
+                        trigger(data.id);
+                        modal.onClose();
                     }}/>
                 </>
                 }

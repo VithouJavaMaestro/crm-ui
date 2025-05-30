@@ -1,5 +1,6 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {config} from "../env.ts";
+import {sendLogout, sendRedirect} from "../utils/redirect.ts";
 
 export const gatewayApi = createApi({
     reducerPath: "gateway",
@@ -16,6 +17,21 @@ export const gatewayApi = createApi({
             })
         })
     })
-})
+});
+
+export const with401BaseQuery = (
+    baseQuery: ReturnType<typeof fetchBaseQuery>
+): BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> => {
+    return async (args, api, extraOptions) => {
+        const result = await baseQuery(args, api, extraOptions);
+
+        if (result.error && result.error.status === 401) {
+            sendRedirect();
+            throw result.error;
+        }
+
+        return result;
+    };
+};
 
 export const {useLogoutMutation} = gatewayApi;

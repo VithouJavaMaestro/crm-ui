@@ -18,11 +18,14 @@ import saveIcon from "../../assets/save.svg";
 import {useForm} from "react-hook-form";
 import {useUpdateNoteMutation} from "../../api/noteApi.ts";
 
-export const NoteDetailEdit = ({data, setMode, closeModal}: {
-    data?: NoteRepresentation,
-    setMode: () => void,
-    closeModal: () => void
-}) => {
+
+export interface NoteDetailProps {
+    data: NoteRepresentation,
+    onSuccessSubmit: () => void,
+    onClickCancel: () => void,
+}
+
+export const NoteDetailForm = (props: NoteDetailProps) => {
 
     const [triggerUpdateNote] = useUpdateNoteMutation();
 
@@ -32,10 +35,10 @@ export const NoteDetailEdit = ({data, setMode, closeModal}: {
     } = useForm<NoteRepresentation>();
 
     const onSubmit = async (note: NoteRepresentation) => {
-        note.id = data?.id;
+        note.id = props.data.id;
         try {
             await triggerUpdateNote(note).unwrap();
-            closeModal();
+            props.onSuccessSubmit();
         } catch (error) {
             console.log(error);
         }
@@ -48,7 +51,7 @@ export const NoteDetailEdit = ({data, setMode, closeModal}: {
                 gap: 30,
                 justifyContent: "flex-end"
             }}>
-                <Clickable src={cancelIcon} alt="" width={20} onClick={setMode}/>
+                <Clickable src={cancelIcon} alt="" width={20} onClick={props.onClickCancel}/>
                 <Clickable src={saveIcon} alt="" height={20} onClick={handleSubmit(onSubmit)}/>
             </div>
         </Header>
@@ -60,24 +63,22 @@ export const NoteDetailEdit = ({data, setMode, closeModal}: {
                     }}>
                         <Color/>
                     </div>
-                    <NoteInput id={'title'} type={'text'} defaultValue={data?.title} {...register("title", ({
+                    <NoteInput id={'title'} type={'text'} defaultValue={props.data.title} {...register("title", ({
                         required: true
                     }))}/>
                 </Topic>
                 <Topic>
                     <img src={dateIcon} alt="date"/>
-                    <DateTitle>{data?.createdAt}</DateTitle>
+                    <DateTitle>{props.data.createdAt}</DateTitle>
                 </Topic>
             </TitleNoteContainer>
             <DescriptionContainer>
                 <img src={menuIcon} alt={"menu"} width={20} height={20}/>
-
                 <NoteTextArea id={'description'} placeholder={"Type something"}
-                              defaultValue={data?.description} {...register("description", ({
+                              defaultValue={props.data.description} {...register("description", ({
                     required: true
                 }))}/>
             </DescriptionContainer>
         </Content>
     </>
-
 }

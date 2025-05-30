@@ -1,6 +1,6 @@
 export interface NoteRepresentation {
-    id?: number,
-    title?: string,
-    description?: string,
-    createdAt?: string
+    id: number,
+    title: string,
+    description: string,
+    createdAt: string
 }

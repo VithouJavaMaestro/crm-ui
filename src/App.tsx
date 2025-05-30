@@ -6,6 +6,7 @@ import {Secured} from "./Secured.tsx";
 import {Dashboard} from "./page/dashboard/Dashboard.tsx";
 import {Ecommerce} from "./page/ecommerce/Ecommerce.tsx";
 import {NoteLayout} from "./page/note/NoteLayout.tsx";
+import {MailLayout} from "./page/mail/MailLayout.tsx";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                         <Route index={true} element={<Dashboard/>}/>
                         <Route path={'/note'} element={<NoteLayout/>}/>
                         <Route path={"/ecommerce"} element={<Ecommerce/>}/>
+                        <Route path={"/mail"} element={<MailLayout/>}/>
                     </Route>
                 </Route>
             </Routes>

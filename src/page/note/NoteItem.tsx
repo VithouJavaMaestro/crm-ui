@@ -10,10 +10,10 @@ export const NoteItem = (note: NoteRepresentation) => {
     const [open, setOpen] = React.useState(false);
 
     return <>
-        {open && <NoteDetail props={{
+        <NoteDetail props={{
             open: open,
             onClose: () => setOpen(false),
-        }} id={note.id ?? 0}/>}
+        }} id={note.id}/>
         <NoteItemContainer>
             <img src={noteIcon} alt="" width={40}/>
             <NoteItemHeader>

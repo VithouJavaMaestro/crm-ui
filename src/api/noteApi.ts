@@ -1,15 +1,17 @@
 import {config} from "../env.ts";
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {NoteRepresentation} from "../model/note.ts";
+import {with401BaseQuery} from "./gatewayApi.ts";
 
 export const noteApi = createApi({
     reducerPath: 'noteApi',
     tagTypes: ['Note'],
-    baseQuery: fetchBaseQuery({
+    baseQuery: with401BaseQuery(fetchBaseQuery({
         baseUrl: `${config.VITE_GATEWAY_URI}/crm-note`,
-        credentials: "include"
-    }),
+        credentials: "include",
+    })),
     refetchOnMountOrArgChange: true,
+    keepUnusedDataFor: 0,
     endpoints: (builder) => ({
         getNotes: builder.query<Array<NoteRepresentation>, void>({
             query: () => ({
@@ -30,6 +32,7 @@ export const noteApi = createApi({
             query: (id: number) => ({
                 url: `/api/notes/${id}`,
             }),
+            providesTags: [{type: 'Note', id: 'FETCH'}]
         }),
         updateNote: builder.mutation<void, NoteRepresentation>({
             query: (note) => ({
@@ -37,7 +40,7 @@ export const noteApi = createApi({
                 method: "PUT",
                 body: note,
             }),
-            invalidatesTags: [{type: "Note", id: "LIST"}]
+            invalidatesTags: [{type: "Note", id: "LIST"}, {type: 'Note', id: 'FETCH'}]
         }),
         deleteNote: builder.mutation<void, number>({
             query: (id) => ({

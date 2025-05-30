@@ -1,21 +1,30 @@
 import styled from "styled-components";
 import {ModalProps} from "../../utils/modal.ts";
 import Modal, {Styles} from "react-modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useGetNoteQuery} from "../../api/noteApi.ts";
-import {NoteContentDetail} from "./NoteContentDetail.tsx";
-import {NoteDetailEdit} from "./NoteDetailEdit.tsx";
+import {NoteDetailContent} from "./NoteDetailContent.tsx";
+import {NoteDetailForm} from "./NoteDetailForm.tsx";
+import {NoteRepresentation} from "../../model/note.ts";
 
 
 export const NoteDetail = ({props, id}: { props: ModalProps, id: number }) => {
 
     const [action, setAction] = useState(Mode.VIEW);
 
-    const {data, isLoading} = useGetNoteQuery(id);
+    const {data} = useGetNoteQuery(id,{skip:!props.open});
 
-    if (isLoading) {
-        return;
+    const NoteContent = (data: NoteRepresentation) => {
+            if (action === Mode.VIEW || action == Mode.DELETE) {
+                return <NoteDetailContent data={data} modal={props} mode={action} setMode={setAction}/>
+            } else if (action == Mode.EDIT) {
+                return <NoteDetailForm data={data} onSuccessSubmit={() => setAction(Mode.VIEW)} onClickCancel={() => setAction(Mode.VIEW)} />
+            }
     }
+
+    useEffect(() => {
+        setAction(Mode.VIEW);
+    }, [props.open])
 
     return (
         <Modal isOpen={props.open} style={modalStyle({
@@ -23,14 +32,8 @@ export const NoteDetail = ({props, id}: { props: ModalProps, id: number }) => {
                 overflowX: 'hidden',
                 borderColor: action === Mode.DELETE ? "red" : "transparent"
             }
-        })} onRequestClose={props.onClose}>
-            {action === Mode.VIEW || action == Mode.DELETE ?
-                <NoteContentDetail data={data} clickCancel={() => props.onClose()}
-                                   clickDelete={() => setAction(Mode.DELETE)}
-                                   clickEdit={() => setAction(Mode.EDIT)} mode={action}
-                                   setMode={() => setAction(Mode.VIEW)}/> :
-                action === Mode.EDIT &&
-                <NoteDetailEdit data={data} setMode={() => setAction(Mode.VIEW)} closeModal={props.onClose}/>}
+        })} onRequestClose={props.onClose} >
+            {data && <NoteContent {...data}/>}
         </Modal>
     )
 }
@@ -167,32 +170,8 @@ export const NoteInput = styled.input`
     }
 `;
 
-export const Button = styled.div<{ color: string }>`
-    width: 110px;
-    height: 40px;
-    background-color: ${props => props.color};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    cursor: pointer;
-`;
-
-
-export const ButtonText = styled.div`
-    font-style: normal;
-    font-weight: 500;
-    font-size: 15px;
-    color: #FFFFFF;
-`;
-
 export const Mode = {
     VIEW: "view",
     EDIT: "edit",
     DELETE: "delete",
 };
-
-export const DeleteTitle = styled.span`
-    text-align: center;
-`;
-
