@@ -7,6 +7,7 @@ import {Dashboard} from "./page/dashboard/Dashboard.tsx";
 import {Ecommerce} from "./page/ecommerce/Ecommerce.tsx";
 import {NoteLayout} from "./page/note/NoteLayout.tsx";
 import {MailLayout} from "./page/mail/MailLayout.tsx";
+import {ChatLayout} from "./page/chat/ChatLayout.tsx";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                         <Route path={'/note'} element={<NoteLayout/>}/>
                         <Route path={"/ecommerce"} element={<Ecommerce/>}/>
                         <Route path={"/mail"} element={<MailLayout/>}/>
+                        <Route path={"/chat"} element={<ChatLayout/>}/>
                     </Route>
                 </Route>
             </Routes>

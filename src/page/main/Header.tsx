@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {expandSidebar} from "../../apps/slice/action.ts";
 import {useAppSelector} from "../../apps/hooks.ts";
 import {useRef, useState} from "react";
-import {Avatar} from "../../component/Avatar.tsx";
+import {Profile} from "../../component/Profile.tsx";
 import vithou from "../../assets/vithou.jpg";
 import profileOptionIcon from "../../assets/profile/profileOptions.svg";
 import {Option} from "./Option.tsx";
@@ -43,7 +43,7 @@ export const Header = () => {
             <img src={searchIcon} alt="searchIcon"/>
             <img src={reminderIcon} alt="reminderIcon"/>
             <VerticalDivider/>
-            <Avatar src={vithou} alt="" width={50}/>
+            <Profile src={vithou} alt="" width={50}/>
             <div style={{
                 display: 'flex'
             }}>
@@ -58,7 +58,7 @@ export const Header = () => {
                     }}/>
                     {clickProfile && <ProfileContainer>
                         <ProfileDetailContainer>
-                            <Avatar src={vithou}/>
+                            <Profile src={vithou}/>
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column'
