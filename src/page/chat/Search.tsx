@@ -17,7 +17,7 @@ const SearchInput = styled.input`
 `
 
 const SearchContainer = styled.div`
-    height: 50px;
+    height: 70px;
     display: flex;
     align-items: center;
     padding-left: 20px;

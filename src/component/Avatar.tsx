@@ -54,13 +54,12 @@ const getColorFromName = (name: string) => {
 }
 
 const extractName = (name: string) => {
-    const parts = name
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
-    if (parts.length === 0) return '?';
-    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    const match = name.match(/(\b\S)?/g);
+    if (match !== null) {
+        let nestedMatch = match.join("").match(/(^\S|\S$)?/g);
+        if (nestedMatch !== null) {
+            return nestedMatch.join("").toUpperCase();
+        }
+    }
+    return name;
 }

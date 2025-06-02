@@ -43,7 +43,7 @@ export const Header = () => {
             <img src={searchIcon} alt="searchIcon"/>
             <img src={reminderIcon} alt="reminderIcon"/>
             <VerticalDivider/>
-            <Profile src={vithou} alt="" width={50}/>
+            <Profile src={vithou} alt="" width={50} height={50}/>
             <div style={{
                 display: 'flex'
             }}>
@@ -58,7 +58,7 @@ export const Header = () => {
                     }}/>
                     {clickProfile && <ProfileContainer>
                         <ProfileDetailContainer>
-                            <Profile src={vithou}/>
+                            <Profile src={vithou} width={50} height={50}/>
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column'

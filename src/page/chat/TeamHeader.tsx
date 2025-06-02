@@ -5,7 +5,7 @@ export const TeamHeader = () => {
     return <Container>
         <TeamTitle>Chats</TeamTitle>
         <Button>
-            <AddIcon fillColor={"#3F434A"}/>
+            <AddIcon fillColor={"#3F434A"} width={12} height={12}/>
         </Button>
     </Container>
 }
