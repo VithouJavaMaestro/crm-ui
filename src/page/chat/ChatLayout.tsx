@@ -16,6 +16,6 @@ export const ChatLayout = () => {
 const ChatContainer = styled.div`
     display: grid;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     grid-template-columns: 1.5fr 3.5fr 2fr;
 `

@@ -1,9 +1,5 @@
-import styled from "styled-components";
-
-export const Conversation = () => {
+export const Conversation = ({type}: { type: string }) => {
     return <div>
 
     </div>
 }
-
-const Container = styled.div``
