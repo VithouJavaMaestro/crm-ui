@@ -1,15 +1,14 @@
 import {Profile} from "../../component/Profile.tsx";
 import vithou from "../../assets/vithou.jpg";
-
 export const FromThem = () => {
-    return <div className="imessage">
+    return <div className="imessage" style={{
+        gap: 10,
+        display: 'flex'
+    }}>
         <Profile src={vithou} width={40} height={40} style={{
-            alignSelf: 'flex-end'
+            alignSelf: "flex-end",
         }}/>
-        <p className="from-them">It was loud. We just laid there and said &ldquo;is this an earthquake? I think
-            this
-            is
+        <p className="from-them">It was loud. We just laid there and said &ldquo;is this an earthquake? I think this is
             an earthquake.&rdquo;</p>
     </div>
-
 }

@@ -12,7 +12,6 @@ export const ChatHeader = () => {
         <ActionContainer>
             <AddIcon fillColor={"#8A9099"} width={20} height={20}/>
             <img src={optionIcon} alt="" width={20} height={20} style={{}}/>
-
         </ActionContainer>
     </Container>
 }
