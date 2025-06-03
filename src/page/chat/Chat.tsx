@@ -80,16 +80,12 @@ export const Chat = () => {
             <FromMe/>
             <FromThem/>
         </MessagesContainer>
-        {showEmojiPicker && <EmojiPicker style={{
-            position: 'relative',
-        }}/>}
+
         <Typing>
 
             <TypingContainer>
                 <img src={attachment} alt=""/>
-                <img src={emoji} alt="" id="my-tooltip" data-tooltip-id="emoji-picker" onClick={() => setShowEmojiPicker(!showEmojiPicker)} style={{
-                    position: 'absolute',
-                }}/>
+                <img src={emoji} alt="" id="my-tooltip" data-tooltip-id="emoji-picker" onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
                 <Input  placeholder={"Type a message here..."} multiple={true}/>
             </TypingContainer>
             <SendContainer >
