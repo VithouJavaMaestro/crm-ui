@@ -187,6 +187,7 @@ p.from-me {
     background-color: #248bf5;
     color: #fff;
     border-bottom-left-radius: 1.15rem;
+    word-break: break-word;
 }
 
 p.from-me::before {

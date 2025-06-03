@@ -1,95 +1,69 @@
 import styled from "styled-components";
-import {FromThem} from "./FromThem.tsx";
 import {ChatHeader} from "./ChatHeader.tsx";
 import {Divider} from "./Divider.tsx";
-import {FromMe} from "./FromMe.tsx";
 import attachment from "../../assets/attachment.svg";
 import emoji from "../../assets/emoji.svg";
 import send from "../../assets/send.svg";
-import EmojiPicker from "emoji-picker-react";
-import {useState} from "react";
-import {Tooltip} from "react-tooltip";
+import {useEffect, useRef, useState} from "react";
+import {FromMe} from "./FromMe.tsx";
+
+export interface Conversion {
+    message: string,
+    chatter: string
+}
 
 export const Chat = () => {
 
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [chat, setChat] = useState<string>('');
+
+    const [chatItems, setChatItems] = useState<Array<string>>([]);
+
+    const bottomRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (chatItems.length >= 1) {
+            bottomRef.current.scrollIntoView({behavior: 'smooth', block: 'end'});
+        }
+    }, [chatItems]);
+
 
     return <Container>
         <ChatHeader/>
         <Divider/>
         <MessagesContainer>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
-            <FromMe/>
-            <FromThem/>
+            {chatItems.map((item, index) => (
+                <FromMe key={index} chatter={''} message={item}/>
+            ))}
+            <div ref={bottomRef}/>
         </MessagesContainer>
 
         <Typing>
 
             <TypingContainer>
                 <img src={attachment} alt=""/>
-                <img src={emoji} alt="" id="my-tooltip" data-tooltip-id="emoji-picker" onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
-                <Input  placeholder={"Type a message here..."} multiple={true}/>
+                <img src={emoji} alt="" id="my-tooltip" data-tooltip-id="emoji-picker"/>
+                <Input value={chat} placeholder={"Type a message here..."} multiple={true}
+                       onChange={e => setChat(e.target.value)} onKeyDown={event => {
+                    if (event.key === "Enter") {
+                        setChatItems([
+                            ...chatItems,
+                            chat
+                        ]);
+
+                        setChat("");
+                    }
+
+                }}/>
             </TypingContainer>
-            <SendContainer >
-                <img src={send} alt="" />
+            <SendContainer onClick={() => {
+                setChatItems([
+                    ...chatItems,
+                    chat
+                ]);
+
+                setChat("");
+            }}>
+                <img src={send} alt=""/>
             </SendContainer>
         </Typing>
     </Container>

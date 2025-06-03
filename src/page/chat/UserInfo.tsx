@@ -7,13 +7,12 @@ import media3 from "../../assets/media3.svg";
 import media4 from "../../assets/media4.svg";
 import media5 from "../../assets/media5.svg";
 import media6 from "../../assets/media6.svg";
-import {Divider} from "./Divider.tsx";
 
 
 export const UserInfo = () => {
     return <Container>
         <UserProfile>
-            <Profile src={vithou} width={150} height={150}/>
+            <Profile src={vithou} width={100} height={100}/>
             <Detail>
                 <Name>
                     Vithou Then
@@ -23,7 +22,6 @@ export const UserInfo = () => {
                 </Position>
             </Detail>
         </UserProfile>
-        <Divider/>
         <UserInfoDetail>
             <InfoText>
                 INFO
@@ -53,7 +51,6 @@ export const UserInfo = () => {
                 New York, NY
             </Description>
         </UserInfoDetail>
-        <Divider/>
         <SocialMedia>
             <SocialMediaHeader>
                 <InfoHeader>
@@ -76,9 +73,9 @@ export const UserInfo = () => {
 }
 
 const MediaCard = styled.div`
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
 `
 
 const SocialMediaHeader = styled.div`
@@ -132,7 +129,7 @@ const Position = styled.span`
 const Name = styled.span`
     font-style: normal;
     font-weight: 600;
-    font-size: 24px;
+    font-size: 20px;
     color: #3F434A;
 `
 
@@ -158,8 +155,10 @@ const UserProfile = styled.div`
 
 const Container = styled.div`
     display: flex;
-    height: 100vh;
     flex-direction: column;
-    padding: 40px;
     gap: 30px;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+    padding: 30px;
+    scrollbar-width: thin;
 `
