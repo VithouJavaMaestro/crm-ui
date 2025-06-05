@@ -54,7 +54,6 @@ export const Teams = () => {
 
 const TeamWrapper = styled.div`
     width: 100%;
-    scrollbar-width: thin;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -62,6 +61,7 @@ const TeamWrapper = styled.div`
     scrollbar-color: #636363 #F5F5F5;
     overflow: auto;
     height: calc(100vh - 210px);
+    scrollbar-width: none;
 `
 
 const TeamContainer = styled.div`

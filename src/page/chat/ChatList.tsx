@@ -14,7 +14,6 @@ export const ChatList = () => {
         <Teams/>
         <VerticalDivider/>
     </ChatListContainer>
-
 }
 
 const ChatListContainer = styled.div`

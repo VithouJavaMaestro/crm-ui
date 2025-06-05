@@ -22,7 +22,7 @@ export const Chat = () => {
 
     useEffect(() => {
         if (chatItems.length >= 1) {
-            bottomRef.current.scrollIntoView({behavior: 'smooth', block: 'end'});
+            bottomRef.current?.scrollIntoView({behavior: 'smooth', block: "end"});
         }
     }, [chatItems]);
 
@@ -34,7 +34,7 @@ export const Chat = () => {
             {chatItems.map((item, index) => (
                 <FromMe key={index} chatter={''} message={item}/>
             ))}
-            <div ref={bottomRef}/>
+            <div style={{backgroundColor:"yellow"}} ref={bottomRef}/>
         </MessagesContainer>
 
         <Typing>
@@ -114,7 +114,8 @@ const MessagesContainer = styled.div`
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    padding: 20px;
     height: calc(100% - 150px);
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    padding-right: 20px;
+    padding-top: 20px;
 `;
