@@ -7,20 +7,21 @@ import {Ecommerce} from "./page/ecommerce/Ecommerce.tsx";
 import {NoteLayout} from "./page/note/NoteLayout.tsx";
 import {MailLayout} from "./page/mail/MailLayout.tsx";
 import {ChatLayout} from "./page/chat/ChatLayout.tsx";
+import {Secured} from "./Secured.tsx";
 
 function App() {
     return (
         <div>
             <Routes>
-                {/*<Route element={<Secured/>}>*/}
-                <Route path='/' element={<Layout/>}>
-                    <Route index={true} element={<Dashboard/>}/>
-                    <Route path={'/note'} element={<NoteLayout/>}/>
-                    <Route path={"/ecommerce"} element={<Ecommerce/>}/>
-                    <Route path={"/mail"} element={<MailLayout/>}/>
-                    <Route path={"/chat"} element={<ChatLayout/>}/>
+                <Route element={<Secured/>}>
+                    <Route path='/' element={<Layout/>}>
+                        <Route index={true} element={<Dashboard/>}/>
+                        <Route path={'/note'} element={<NoteLayout/>}/>
+                        <Route path={"/ecommerce"} element={<Ecommerce/>}/>
+                        <Route path={"/mail"} element={<MailLayout/>}/>
+                        <Route path={"/chat"} element={<ChatLayout/>}/>
+                    </Route>
                 </Route>
-                {/*</Route>*/}
             </Routes>
         </div>
     )

@@ -18,14 +18,14 @@ const AVATAR_COLORS = [
 
 const AvatarStyled = styled.div<{ bg: string }>`
     font-size: 16px;
-    width: 3em;
-    height: 3em;
     border-radius: 50%;
     background: ${props => props.bg};
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
+    width: 2.5rem;
+    height: 2.5rem;
 }
 `
 

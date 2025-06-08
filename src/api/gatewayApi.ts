@@ -1,6 +1,6 @@
 import {BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {config} from "../env.ts";
-import {sendLogout, sendRedirect} from "../utils/redirect.ts";
+import {sendRedirect} from "../utils/redirect.ts";
 
 export const gatewayApi = createApi({
     reducerPath: "gateway",

@@ -25,7 +25,7 @@ const LogoText = styled.h4`
     font-size: 24px;
 `;
 
-const SearchInput = styled.input`
+export const SearchInput = styled.input`
     border-radius: 6px;
     background-color: #f5f5f5;
     background-image: url("../../assets/search.svg");
@@ -77,7 +77,8 @@ export const Sidebar = () => {
             <MenuList>
                 <MenuTitle>Menu items</MenuTitle>
                 {menuItems.map((value, index) => {
-                    return <MenuItem icon={value.icon} label={value.label} path={value.path} options={value.options} key={index}/>;
+                    return <MenuItem icon={value.icon} label={value.label} path={value.path} options={value.options}
+                                     key={index}/>;
                 })}
             </MenuList>
         </SidebarContainer>

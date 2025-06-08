@@ -1,13 +1,23 @@
 import styled from "styled-components";
 import {AddIcon} from "../../component/Svg.tsx";
+import {InvitePeople} from "./InvitePeople.tsx";
+import {useState} from "react";
 
 export const TeamHeader = () => {
-    return <Container>
-        <TeamTitle>Chats</TeamTitle>
-        <Button>
-            <AddIcon fillColor={"#3F434A"} width={12} height={12}/>
-        </Button>
-    </Container>
+
+    const [openModal, setOpenModal] = useState<boolean>(false);
+
+    return <>
+        <InvitePeople open={openModal} onClose={() => setOpenModal(false)}/>
+        <Container>
+            <TeamTitle>Chats</TeamTitle>
+            <Button onClick={() => {
+                setOpenModal(true)
+            }}>
+                <AddIcon fillColor={"#3F434A"} width={12} height={12}/>
+            </Button>
+        </Container>
+    </>
 }
 
 const Button = styled.div`
