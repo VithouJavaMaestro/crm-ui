@@ -1,28 +1,17 @@
 import styled from "styled-components";
-import menuIcon from "../../assets/menu.svg";
 import searchIcon from "../../assets/search.svg";
 import reminderIcon from "../../assets/reminder.svg";
-import {useDispatch} from "react-redux";
-import {expandSidebar} from "../../apps/slice/action.ts";
-import {useAppSelector} from "../../apps/hooks.ts";
 import {useRef, useState} from "react";
 import {Profile} from "../../component/Profile.tsx";
 import vithou from "../../assets/vithou.jpg";
 import profileOptionIcon from "../../assets/profile/profileOptions.svg";
 import {Option} from "./Option.tsx";
 import profileIcon from "../../assets/profile/profile.svg";
-import messageIcon from "../../assets/profile/message.svg";
-import taskIcon from "../../assets/profile/task.svg";
-import settingIcon from "../../assets/profile/setting.svg";
-import lockIcon from "../../assets/profile/lock.svg";
 import logoutIcon from "../../assets/profile/logout.svg";
 import {useClickAway} from "react-use";
 import {sendLogout} from "../../utils/redirect.ts";
 
 export const Header = () => {
-    const dispatch = useDispatch();
-    const action = useAppSelector(state => state.action);
-    const [click, setClick] = useState(false);
     const [clickProfile, setClickProfile] = useState(false);
     const profileRef = useRef(null);
 
@@ -32,13 +21,7 @@ export const Header = () => {
     });
 
     return <HeaderContainer>
-        <img src={menuIcon} alt="" style={{
-            alignSelf: "center",
-            cursor: 'pointer',
-        }} onClick={() => {
-            dispatch(expandSidebar(!action.expandedSidebar))
-            setClick(!click);
-        }}/>
+
         <ActionContainer>
             <img src={searchIcon} alt="searchIcon"/>
             <img src={reminderIcon} alt="reminderIcon"/>
@@ -59,25 +42,14 @@ export const Header = () => {
                     {clickProfile && <ProfileContainer>
                         <ProfileDetailContainer>
                             <Profile src={vithou} width={50} height={50}/>
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column'
+                            <span style={{
+                                alignSelf: 'center'
                             }}>
-                            <span>
                                 Vithou Then
                             </span>
-                                <span>
-                                Manager
-                            </span>
-                            </div>
                         </ProfileDetailContainer>
                         <HorizontalDivider/>
                         <Option icon={profileIcon} label={'My Profile'}/>
-                        <Option icon={messageIcon} label={'My Message'}/>
-                        <Option icon={taskIcon} label={'My Task'}/>
-                        <HorizontalDivider/>
-                        <Option icon={settingIcon} label={'My Setting'}/>
-                        <Option icon={lockIcon} label={'Lock Screen'}/>
                         <HorizontalDivider/>
                         <Option icon={logoutIcon} label={'Logout'} css={{
                             marginBottom: 8
@@ -98,7 +70,7 @@ const HeaderContainer = styled.div`
     padding-left: 20px;
     padding-right: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     border-bottom: 2px solid #F5F5F5;
 `;
 

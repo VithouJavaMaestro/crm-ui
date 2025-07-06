@@ -5,9 +5,9 @@ import {Route, Routes} from "react-router";
 import {Dashboard} from "./page/dashboard/Dashboard.tsx";
 import {Ecommerce} from "./page/ecommerce/Ecommerce.tsx";
 import {NoteLayout} from "./page/note/NoteLayout.tsx";
-import {MailLayout} from "./page/mail/MailLayout.tsx";
 import {ChatLayout} from "./page/chat/ChatLayout.tsx";
 import {Secured} from "./Secured.tsx";
+import {MailLayout} from "./page/mail/MailLayout.tsx";
 
 function App() {
     return (

@@ -1,26 +1,23 @@
-import {useLazyGetUserInfoQuery, UserPrinciple} from "./api/oauth2ServerApi.ts";
 import {useEffect, useState} from "react";
 import {Loader} from "./component/Loader.tsx";
 import {Outlet} from "react-router";
 import {sendRedirect} from "./utils/redirect.ts";
 import {useErrorBoundary} from "react-error-boundary";
+import {useLazyMeQuery, User} from "./api/userApi.ts";
 
 export const Secured = () => {
 
-    const [getUserInfo, {isFetching}] = useLazyGetUserInfoQuery();
+    const [me, {isFetching}] = useLazyMeQuery();
 
     const [authenticated, setAuthenticated] = useState(false);
 
     const {showBoundary} = useErrorBoundary();
 
     useEffect(() => {
-        getUserInfo()
+        me()
             .unwrap()
-            .then((response: UserPrinciple) => {
-                if (response && response.sub) {
-                    localStorage.setItem("auth_state", "authenticated");
-                    setAuthenticated(true);
-                }
+            .then((response: User) => {
+                setAuthenticated(true);
             }).catch((error) => {
             if (error.status === 401) {
                 sendRedirect();

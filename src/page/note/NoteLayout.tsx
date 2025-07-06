@@ -4,7 +4,6 @@ import styled from "styled-components";
 import {NoteItem} from "./NoteItem.tsx";
 import {useGetNotesQuery} from "../../api/noteApi.ts";
 import {Loader} from "../../component/Loader.tsx";
-import {LinearProgress} from "../../component/LinearProgress.tsx";
 
 const NoteContainer = styled.div`
     width: 100%;
@@ -39,7 +38,6 @@ export const NoteLayout = () => {
         <NoteCard>
 
             <NoteContainer>
-                <LinearProgress open={true}/>
                 <Stack style={{
                     padding: 20,
                     gap: 20

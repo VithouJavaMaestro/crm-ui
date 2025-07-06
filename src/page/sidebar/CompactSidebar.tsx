@@ -61,7 +61,7 @@ const MenuItem = ({icon, path, label}: MenuItemProps) => {
             <MenuItemContainer active={active} onClick={() => navigate(path)} data-tooltip-id={label}>
                 <img src={icon} alt={icon.toString()} width={23} color={'#FFFFFF'}/>
             </MenuItemContainer>
-            <Tooltip content={label} variant={'info'} id={label} arrowColor={'#21943A'} style={{
+            <Tooltip place={'right-end'} content={label} variant={'info'} id={label} arrowColor={'#21943A'} style={{
                 backgroundColor: '#21943A'
             }}/>
         </>

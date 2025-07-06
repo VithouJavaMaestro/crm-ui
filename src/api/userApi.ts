@@ -10,10 +10,10 @@ export interface User {
 }
 
 export const userApi = createApi({
-    reducerPath: "users",
+    reducerPath: "userApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${config.VITE_GATEWAY_URI}/crm-profile`,
-        credentials: "include"
+        credentials: "include",
     }),
     refetchOnMountOrArgChange: true,
     endpoints: (builder) => ({
@@ -24,8 +24,13 @@ export const userApi = createApi({
                     "filter": filter
                 }
             })
+        }),
+        me: builder.query<User, void>({
+            query: () => ({
+                url: "/users/me"
+            })
         })
     })
 })
 
-export const {useLazyGetUsersQuery} = userApi;
+export const {useLazyGetUsersQuery, useLazyMeQuery} = userApi;

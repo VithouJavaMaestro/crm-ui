@@ -21,6 +21,7 @@ export const InvitePeople = (props: ModalProps) => {
         triggerGetUsers(value)
             .unwrap()
             .then(users => {
+                console.log(users);
                 setSuggestions(users);
             });
     };
@@ -63,7 +64,7 @@ export const InvitePeople = (props: ModalProps) => {
                         value={inputValue}
                         onChange={handleChange}
                     />
-                    {(suggestions.length > 0 && inputValue.trim().length > 0) && (
+                    {(suggestions.length > 0) && (
                         <SuggestionBox>
                             {suggestions.map((s, idx) => (
                                 <SuggestionItem key={idx} onClick={() => handleSuggestionClick(s.email)}>

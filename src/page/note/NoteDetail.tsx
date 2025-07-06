@@ -8,18 +8,19 @@ import {NoteDetailForm} from "./NoteDetailForm.tsx";
 import {NoteRepresentation} from "../../model/note.ts";
 
 
-export const NoteDetail = ({props, id}: { props: ModalProps, id: number }) => {
+export const NoteDetail = ({props, id}: { props: ModalProps, id: string }) => {
 
     const [action, setAction] = useState(Mode.VIEW);
 
-    const {data} = useGetNoteQuery(id,{skip:!props.open});
+    const {data} = useGetNoteQuery(id, {skip: !props.open});
 
     const NoteContent = (data: NoteRepresentation) => {
-            if (action === Mode.VIEW || action == Mode.DELETE) {
-                return <NoteDetailContent data={data} modal={props} mode={action} setMode={setAction}/>
-            } else if (action == Mode.EDIT) {
-                return <NoteDetailForm data={data} onSuccessSubmit={() => setAction(Mode.VIEW)} onClickCancel={() => setAction(Mode.VIEW)} />
-            }
+        if (action === Mode.VIEW || action == Mode.DELETE) {
+            return <NoteDetailContent data={data} modal={props} mode={action} setMode={setAction}/>
+        } else if (action == Mode.EDIT) {
+            return <NoteDetailForm data={data} onSuccessSubmit={() => setAction(Mode.VIEW)}
+                                   onClickCancel={() => setAction(Mode.VIEW)}/>
+        }
     }
 
     useEffect(() => {
@@ -32,7 +33,7 @@ export const NoteDetail = ({props, id}: { props: ModalProps, id: number }) => {
                 overflowX: 'hidden',
                 borderColor: action === Mode.DELETE ? "red" : "transparent"
             }
-        })} onRequestClose={props.onClose} >
+        })} onRequestClose={props.onClose}>
             {data && <NoteContent {...data}/>}
         </Modal>
     )
