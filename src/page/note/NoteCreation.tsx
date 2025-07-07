@@ -137,7 +137,7 @@ const AddNoteForm = styled.div`
 const CreateNoteButton = styled.div`
     width: 110px;
     height: 40px;
-    background-color: #21943A;
+    background-color: #0078D4;
     display: flex;
     justify-content: center;
     align-items: center;

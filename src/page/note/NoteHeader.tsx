@@ -49,7 +49,7 @@ const FilterButton = styled.div`
 const AddNoteButton = styled.div`
     width: 127px;
     height: 40px;
-    background-color: #21943A;
+    background-color: #0078D4;
     cursor: pointer;
     border-radius: 10px;
     display: flex;

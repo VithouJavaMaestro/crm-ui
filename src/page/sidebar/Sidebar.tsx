@@ -73,7 +73,6 @@ export const Sidebar = () => {
             </LogoSection>
 
 
-            <SearchInput type="text" name="search" placeholder="Search anything" autoComplete={'off'}/>
             <MenuList>
                 <MenuTitle>Menu items</MenuTitle>
                 {menuItems.map((value, index) => {

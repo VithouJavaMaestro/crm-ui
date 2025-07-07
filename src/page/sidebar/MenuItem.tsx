@@ -6,7 +6,7 @@ import React, {useState} from "react";
 import selectIcon from "../../assets/select.svg";
 import {Object} from "../../utils/shared.ts";
 
-const MenuItemContainer = styled.div`
+const MenuItemContainer = styled.div<{ active: boolean }>`
     display: flex;
     align-items: center;
     gap: 10px;
@@ -16,6 +16,16 @@ const MenuItemContainer = styled.div`
     height: 50px;
     padding-right: 10px;
     border-radius: 8px;
+
+    margin-left: ${props => (props.active ? "10px" : "20px")};
+    padding-left: ${props => (props.active ? "10px" : "0")};
+    background: ${props => (props.active ? "#E5F1FB" : "transparent")};
+
+    &:hover {
+        margin-left: 10px;
+        padding-left: 10px;
+        background-color: #e5f1fb;
+    }
 `;
 
 const ActiveIndicator = styled.div`
@@ -23,7 +33,7 @@ const ActiveIndicator = styled.div`
     height: 44px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    background-color: #21943A;
+    background-color: #0078D4;
 `;
 
 const MenuLabel = styled.span`
@@ -76,11 +86,7 @@ export const MenuItem = ({label, icon, path, options, action}: MenuItemProps) =>
                 {active && <ActiveIndicator/>}
                 <MenuItemContainer onClick={() => {
                     navigate(path);
-                }} style={{
-                    marginLeft: active ? 10 : 20,
-                    paddingLeft: active ? 10 : 0,
-                    background: active ? "#B9EB8E" : "transparent"
-                }} >
+                }} active={active}>
                     <div style={{
                         display: 'flex',
                         gap: "10px",
