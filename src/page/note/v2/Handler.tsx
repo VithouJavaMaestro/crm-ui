@@ -1,9 +1,8 @@
-
 import "../../../App.css";
 
 export const handlers: Record<string, (props: HTMLElement) => void> = {
     "bold": (props) => {
-        props.className = 'bold-style';
+        props.style.fontWeight = "bold";
     },
     "italic": (props) => {
         props.style.fontStyle = "italic";

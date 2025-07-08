@@ -10,35 +10,41 @@ import {TextAlignRight} from "../../../component/svg/TextAlignRight.tsx";
 import {Image} from "../../../component/svg/Image.tsx";
 import {DeleteIcon} from "../../../component/svg/DeleteIcon.tsx";
 import {RichEditProps} from "./RichTextEdit.tsx";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {TextStrikeIcon} from "../../../component/svg/TextStrikeIcon.tsx";
 import {CodeIcon} from "../../../component/svg/CodeIcon.tsx";
 import {handlers} from "./Handler.tsx";
+
 
 export const Right = () => {
 
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
+    const descriptionRef = useRef(null);
+
+    const [text, setText] = useState<string>();
+
+
     const applyStyles = (name: string) => {
-
-        const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0) {
+        if (!descriptionRef.current || descriptionRef.current.trim() === 0) {
             return;
         }
-
-
-        const html = document.getElementById("description");
-
-        if (!html) {
-            return;
-        }
-
-        handlers[name](html);
+        let spanElement = document.createElement("span");
+        spanElement.innerText = descriptionRef.current;
+        handlers[name](spanElement);
+        setText(text.replace(descriptionRef.current, spanElement.outerHTML));
     }
 
+    const computeSelectionText = () => {
+        let sel = getSelection();
+        const {anchorOffset, focusOffset} = sel;
+        if ((anchorOffset === focusOffset) || !text) {
+            return;
+        }
+        descriptionRef.current = text.substring(anchorOffset, focusOffset);
+    };
 
-    return <Container>
-        <p className={'xbolder'}>sdfdsf</p>
+    return <Container className={'crm-scroll'}>
         <DescriptionHeader>
             <CategoryContainer>
                 <Circle/>
@@ -51,11 +57,11 @@ export const Right = () => {
                 return <>
                     <RichTextContainer key={pIndex}>
                         {data.components.map((component, cIndex) => {
-                            const idx = pIndex * 100 + cIndex;
-                            return <Section key={idx} focused={focusedIndex === idx}
-                                            onClick={() => {
-                                                setFocusedIndex(idx);
-                                                applyStyles(component.handler ?? '');
+                            const index = cIndex * 100 + pIndex;
+                            return <Section key={cIndex} focused={focusedIndex === index}
+                                            onClick={(e) => {
+                                                setFocusedIndex(index);
+                                                applyStyles(component.handler)
                                             }}>
                                 {component.icon}
                             </Section>
@@ -71,22 +77,19 @@ export const Right = () => {
             </DescriptionTitle>
         </DescriptionTitleContainer>
 
-        <DescriptionContent id={'description'}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci consequuntur, dolorem ea earum
-            hic, iste molestiae natus pariatur porro ratione recusandae similique soluta veniam voluptate. Aperiam at
-            atque corporis dolore ea eveniet fugiat impedit in inventore ipsam iusto modi, neque non obcaecati officia
-            provident quibusdam repudiandae saepe velit vitae. Enim error ipsum maxime nemo, nobis numquam quam quasi
-            quod recusandae rerum tempora vero? Aut beatae blanditiis commodi ducimus facere ipsam necessitatibus
-            perferendis rerum voluptates. Ab asperiores autem commodi delectus dicta, ex fugiat, incidunt ipsam ipsum
-            nisi numquam, quas vero voluptatibus! Aliquid deleniti doloremque doloribus eius, error iure reprehenderit
-            veritatis.
-        </DescriptionContent>
+        <DescriptionContent contentEditable suppressContentEditableWarning
+                            onSelect={() => {
+                                computeSelectionText();
+                            }} onBlur={event => {
+            setText(event.currentTarget.textContent);
+        }} dangerouslySetInnerHTML={{__html: text}}/>
+
+
     </Container>
 }
 
 
-const DescriptionContent = styled.span`
-    padding: 10px;
+const DescriptionContent = styled.div`
 `
 
 const DescriptionTitle = styled.h2`
@@ -94,7 +97,7 @@ const DescriptionTitle = styled.h2`
 `;
 
 
-const DescriptionTitleContainer = styled.section`
+const DescriptionTitleContainer = styled.div`
     display: flex;
     flex-direction: column;
     border-bottom: 2px solid #ecedf1;
@@ -145,6 +148,7 @@ const Container = styled.section`
     gap: 30px;
     display: flex;
     flex-direction: column;
+    height: 100%;
 `
 
 const richEditData: Array<RichEditProps> = [
