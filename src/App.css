@@ -318,3 +318,38 @@ p[class^="from-"].emoji::before {
     -webkit-transform: translate(0, -2px);
 }
 
+.crm-scroll {
+    --sb-track-color: #e6f7ff;
+    --sb-thumb-color: #3399ff;
+    --sb-size: 7px;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.crm-scroll::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+.crm-scroll::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 1px;
+}
+
+.crm-scroll::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 1px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .crm-scroll {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+        scrollbar-width: thin;
+    }
+}
+
+.bold-style {
+    font-weight: normal;
+}
+.bold-style::selection{
+    font-weight: bold;
+}

@@ -11,7 +11,7 @@ export const Left = () => {
                 <AddIcon fill={'black'}/>
             </AddCategoryIcon>
         </CategoryHeader>
-        <CategoryItemContainer>
+        <CategoryItemContainer  className={'crm-scroll'}>
             <CategoryItem>
                 <CategoryTitle>
                     All
@@ -263,9 +263,6 @@ const NumNote = styled.span`
 `
 
 const CategoryItemContainer = styled.section`
-    overflow-x: hidden;
-    overflow-y: auto;
-    scrollbar-width: thin;
     height: calc(100vh - 130px);
 `
 

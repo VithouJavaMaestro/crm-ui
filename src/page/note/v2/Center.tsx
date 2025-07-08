@@ -5,27 +5,28 @@ import {NoteItem} from "./NoteItem.tsx";
 
 export const Center = () => {
     return <Container>
-        <CategoryText>General</CategoryText>
+        <Inner>
+            <CategoryText>General</CategoryText>
+            <NoteActionSection>
+                <div>
+                    <NoteFilteringSection>
+                        <FilteringCard>
+                            <NoteNumber>42</NoteNumber>
+                            <NoteNumber>Notes</NoteNumber>
+                        </FilteringCard>
+                    </NoteFilteringSection>
+                    <NoteSearchSection placeholder={'Search Notes...'} type="text" name="search" autoComplete={"off"}
+                                       autoFocus={false} multiple={true}/>
+                </div>
 
-        <NoteActionSection>
-            <div>
-                <NoteFilteringSection>
-                    <FilteringCard>
-                        <NoteNumber>42</NoteNumber>
-                        <NoteNumber>Notes</NoteNumber>
-                    </FilteringCard>
-                </NoteFilteringSection>
-                <NoteSearchSection placeholder={'Search Notes...'} type="text" name="search" autoComplete={"off"}
-                                   autoFocus={false} multiple={true}/>
-            </div>
+                <AddNote>
+                    <img src={addIcon} alt=""/>
+                    <CreateNoteTypography>Add Note</CreateNoteTypography>
+                </AddNote>
+            </NoteActionSection>
+        </Inner>
 
-
-            <AddNote>
-                <img src={addIcon} alt=""/>
-                <CreateNoteTypography>Add Note</CreateNoteTypography>
-            </AddNote>
-        </NoteActionSection>
-        <NoteItemContainer>
+        <NoteItemContainer className={'crm-scroll'}>
             <NoteItem/>
             <NoteItem/>
             <NoteItem/>
@@ -67,12 +68,7 @@ const CategoryText = styled.h3`
 `
 
 const NoteItemContainer = styled.section`
-    overflow: auto;
     height: calc(100vh - 290px);
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    margin-right: -30px;
-    margin-left: -30px;
 `
 
 
@@ -112,7 +108,8 @@ const Container = styled.section`
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin: 30px;
+    width: 100%;
+    border-right: 1px solid #ECEDF1;
 `
 
 const NoteActionSection = styled.section`
@@ -135,3 +132,7 @@ const NoteSearchSection = styled.input`
     padding-right: 40px;
     width: 100%;
 `;
+
+const Inner = styled.section`
+    padding: 20px;
+ `
