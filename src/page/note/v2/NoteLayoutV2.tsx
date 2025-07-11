@@ -14,6 +14,6 @@ export const NoteLayoutV2 = () => {
 
 export const Container = styled.section`
     display: grid;
-    grid-template-columns: 1.5fr 2.5fr 3fr;
+    grid-template-columns: 1fr 2fr 4fr;
     height: calc(100vh - 80px);
 `

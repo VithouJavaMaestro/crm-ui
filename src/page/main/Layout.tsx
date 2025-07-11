@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {Outlet} from "react-router";
 import {Header} from "./Header.tsx";
 import {Sidebar} from "../sidebar/Sidebar.tsx";
+import {CompactSidebar} from "../sidebar/CompactSidebar.tsx";
 
 const Container = styled.div`
     display: flex;
@@ -27,7 +28,7 @@ export const Layout = () => {
 
             <Container>
 
-                <Sidebar/>
+                <CompactSidebar/>
                 <Content>
                     <Header/>
                     <Outlet/>
