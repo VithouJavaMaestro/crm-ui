@@ -3,14 +3,25 @@ import {RichTextEditProp} from "./Right.tsx";
 import {Editor} from "@tiptap/react";
 import {useState} from "react";
 
-export const RichTextItem = ({props, editor}: {props: RichTextEditProp, editor: Editor}) => {
+
+export const RichTextItem = ({props, editor}: { props: RichTextEditProp, editor: Editor | undefined | null }) => {
+
+    const styles = () => {
+        if (!editor) {
+            return undefined;
+        }
+
+        return props.styles(editor);
+    }
 
     const [toggle, setToggle] = useState(false);
 
-    return <Container onClick={() =>{
-        if (props.handleClick) props.handleClick(editor);
+    return <Container onClick={() => {
+        if (editor && props.handleClick) {
+            props.handleClick(editor);
+        }
         setToggle(!toggle);
-    }} style={props.styles(editor)} >
+    }} style={styles()}>
         {props.icon}
     </Container>
 }

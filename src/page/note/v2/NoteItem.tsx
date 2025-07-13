@@ -27,17 +27,18 @@ export const NoteItem = () => {
 const Description = styled.span`
     color: #b1b3b5;
     display: block;
+    font-size: 12px;
 `
 
 const TitleSection = styled.span`
     font-weight: 600;
-    font-size: 1.1rem;
     display: block;
+    font-size: 14px;
 `
 
 const NoteText = styled.span`
     color: #b3b4b8;
-    font-size: 14px;
+    font-size: 12px;
 `
 
 const Circle = styled.section`

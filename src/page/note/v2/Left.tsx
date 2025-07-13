@@ -11,7 +11,7 @@ export const Left = () => {
                 <AddIcon fill={'black'}/>
             </AddCategoryIcon>
         </CategoryHeader>
-        <CategoryItemContainer  className={'crm-scroll'}>
+        <CategoryItemContainer className={'crm-scroll'}>
             <CategoryItem>
                 <CategoryTitle>
                     All
@@ -283,6 +283,7 @@ const CategoryItem = styled.section`
 const CategoryTitle = styled.section`
     display: flex;
     justify-content: flex-start;
+    font-size: 12px;
 
 
 `
@@ -293,6 +294,7 @@ const AddCategoryIcon = styled.section`
 
 const CategoryHeaderTitle = styled.h4`
     text-transform: uppercase;
+    font-size: 16px;
 `
 
 

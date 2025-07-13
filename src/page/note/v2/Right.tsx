@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {BoldIcon} from "../../../component/svg/BoldIcon.tsx";
 import {ItalicIcon} from "../../../component/svg/ItalicIcon.tsx";
 import {UnderlineIcon} from "../../../component/svg/UnderlineIcon.tsx";
-import {LinkIcon} from "../../../component/svg/LinkIcon.tsx";
 import {TextStrikeIcon} from "../../../component/svg/TextStrikeIcon.tsx";
 import {Editor, EditorContent, useEditor} from "@tiptap/react";
 import Bold from '@tiptap/extension-bold'
@@ -15,11 +14,9 @@ import {Object} from "../../../utils/shared.ts";
 import {RichTextItem} from "./RichTextItem.tsx";
 import Underline from '@tiptap/extension-underline'
 import Strike from '@tiptap/extension-strike'
-import Link from '@tiptap/extension-link'
 import {TextAlignLeftIcon} from "../../../component/svg/TextAlignLeftIcon.tsx";
 import {TextAlignCenter} from "../../../component/svg/TextAlignCenter.tsx";
 import {TextAlignRight} from "../../../component/svg/TextAlignRight.tsx";
-import Heading from '@tiptap/extension-heading'
 import {TextAlign} from "@tiptap/extension-text-align";
 
 export interface RichEditProps {
@@ -29,86 +26,36 @@ export interface RichEditProps {
 export interface RichTextEditProp {
     icon: ReactElement<Object, Object>,
     handleClick?: (editor: Editor) => void;
-    styles?: (editor: Editor) => React.CSSProperties
+    styles: (editor: Editor) => React.CSSProperties | undefined
+}
+
+function createEditor(content: string) {
+    return useEditor({
+        extensions: [Document, Bold, Text, Paragraph, Italic, Underline, Strike, TextAlign.configure({
+            types: ['paragraph'],
+        }),],
+        content: content
+    });
 }
 
 export const Right = () => {
 
     const [changeDescription, setChangeDescription] = useState<boolean>();
 
+    const [changeTitle, setChangeTitle] = useState<boolean>();
 
-    const editor = useEditor({
-        extensions: [Heading, Document, Bold, Text, Paragraph, Italic, Underline, Strike, Link.configure({
-            openOnClick: false,
-            autolink: true,
-            defaultProtocol: 'https',
-            protocols: ['http', 'https'],
-            isAllowedUri: (url, ctx) => {
-                try {
-                    // construct URL
-                    const parsedUrl = url.includes(':') ? new URL(url) : new URL(`${ctx.defaultProtocol}://${url}`)
 
-                    // use default validation
-                    if (!ctx.defaultValidate(parsedUrl.href)) {
-                        return false
-                    }
+    const titleEditor = createEditor('<span>\n' +
+        '        Devs Just Want to Have Fun by Cyndi Lauper\n' +
+        '      </span>');
 
-                    // disallowed protocols
-                    const disallowedProtocols = ['ftp', 'file', 'mailto']
-                    const protocol = parsedUrl.protocol.replace(':', '')
+    const descriptionEditor = createEditor('<span>\n' +
+        'Just Want to Have Fun by Cyndi Lauper\n' +
+        '      </span>');
 
-                    if (disallowedProtocols.includes(protocol)) {
-                        return false
-                    }
+    const [currentEditor, setCurrentEditor] = useState<Editor | null>();
 
-                    // only allow protocols specified in ctx.protocols
-                    const allowedProtocols = ctx.protocols.map(p => (typeof p === 'string' ? p : p.scheme))
-
-                    if (!allowedProtocols.includes(protocol)) {
-                        return false
-                    }
-
-                    // disallowed domains
-                    const disallowedDomains = ['example-phishing.com', 'malicious-site.net']
-                    const domain = parsedUrl.hostname
-
-                    if (disallowedDomains.includes(domain)) {
-                        return false
-                    }
-
-                    // all checks have passed
-                    return true
-                } catch {
-                    return false
-                }
-            },
-            shouldAutoLink: url => {
-                try {
-                    // construct URL
-                    const parsedUrl = url.includes(':') ? new URL(url) : new URL(`https://${url}`)
-
-                    // only auto-link if the domain is not in the disallowed list
-                    const disallowedDomains = ['example-no-autolink.com', 'another-no-autolink.com']
-                    const domain = parsedUrl.hostname
-
-                    return !disallowedDomains.includes(domain)
-                } catch {
-                    return false
-                }
-            },
-
-        }), TextAlign.configure({
-            types: ['heading', 'paragraph'],
-        }),
-        ],
-        content: `
-           <p><strong>Lorem</strong> ipsum dolor sit amet, consectetur adipisicing elit. Accusantium ad autem cupiditate dolorem eius esse ex facere fuga illum magnam nesciunt, non nostrum officiis possimus, quam quasi repellendus saepe tempore ut voluptate. Cupiditate dolor incidunt modi nemo nostrum odit unde! Accusantium aliquam blanditiis consequuntur corporis cum delectus dolor earum eos est ex impedit in incidunt, labore laborum magnam molestias mollitia necessitatibus numquam omnis, optio perspiciatis praesentium quae qui quisquam quos sequi soluta voluptates? Esse explicabo fugit ipsum itaque nemo nulla numquam porro possimus! Ab ad consequatur culpa deleniti doloribus eaque esse excepturi ipsum molestiae, nesciunt perspiciatis qui sapiente sunt, vero.</p>
-        `,
-        shouldRerenderOnTransaction: true,
-        immediatelyRender: true,
-    });
-
-    return <Container className={'crm-scroll'}>
+    return <Container>
         <DescriptionHeader>
             <CategoryContainer>
                 <Circle/>
@@ -122,67 +69,120 @@ export const Right = () => {
                     <RichTextContainer key={pIndex}>
                         {data.components.map((component, cIndex) => {
                             const key = cIndex * 100 + pIndex;
-                            return <RichTextItem editor={editor} props={component} key={key}/>
+                            return <RichTextItem editor={currentEditor} props={component} key={key}/>
                         })}
                     </RichTextContainer>
                 </>
             })}
 
         </DescriptionHeader>
-        <DescriptionTitleContainer>
-            <DescriptionTitle>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet dolore dolorum hic iure quas quia
-                reiciendis unde velit. Provident, suscipit!
-            </DescriptionTitle>
-        </DescriptionTitleContainer>
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 8
-        }}>
-            <StyledEditorContent editor={editor} multiple={true}
-                                 onFocus={() => {
-                                     setChangeDescription(true);
-                                 }}
-                                 onBlur={() => {
-                                     setChangeDescription(false);
-                                 }}/>
-            {changeDescription && <div style={{
-                alignSelf: 'flex-end',
-                cursor: 'pointer'
-            }}>
-                <button>Cancel
-                </button>
-                <button>Save
-                </button>
-            </div>}
+        <Scrollable className={'crm-scroll'}>
+            <ContentContainer>
+                <StyledEditorContent editor={titleEditor} onFocus={() => {
+                    setCurrentEditor(titleEditor);
+                    setChangeTitle(true);
+                }} style={{
+                    borderBottom: '2px solid #ecedf1',
+                }} onBlur={() => {
+                    setChangeTitle(false);
+                }}/>
+                {changeTitle && <SaveContentContainer>
+                    <CancelButton>Cancel</CancelButton>
+                    <SaveButton>Save</SaveButton>
+                </SaveContentContainer>}
+            </ContentContainer>
 
-        </div>
+            <ContentContainer>
+                <StyledEditorContent editor={descriptionEditor}
+                                     onFocus={() => {
+                                         setCurrentEditor(descriptionEditor);
+                                         setChangeDescription(true);
+                                     }}
+                                     onBlur={() => {
+                                         setChangeDescription(false);
+                                     }}/>
+                {changeDescription && <SaveContentContainer>
+                    <CancelButton>Cancel</CancelButton>
+                    <SaveButton>Save</SaveButton>
+                </SaveContentContainer>}
+            </ContentContainer>
+        </Scrollable>
 
 
     </Container>
 }
 
+const Scrollable = styled.section`
+    width: 100%;
+    height: calc(100vh - 140px);
+
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 20px;
+`
+
+const ContentContainer = styled.section`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`
+
+const SaveContentContainer = styled.section`
+    align-self: flex-end;
+    cursor: pointer;
+    display: flex;
+    gap: 10px
+`
+
+const Button = styled.button`
+    padding: 6px;
+    width: 6rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+`;
+
+const CancelButton = styled(Button)`
+    background-color: #F5F5F5;
+    color: #333333;
+
+    &:hover {
+        background-color: #E0E0E0;
+        color: #111111;
+    }
+
+    &:active {
+        background-color: #D5D5D5;
+        color: #111111;
+    }
+`
+
+const SaveButton = styled(Button)`
+    background-color: #0078D4;
+    color: #FFFFFF;
+
+    &:hover {
+        background-color: #005fa3;
+    }
+
+    &:active {
+        background-color: #004c87;
+    }
+
+    &:disabled {
+        background-color: #A1C4E7;
+    }
+`
+
 const StyledEditorContent = styled(EditorContent)`
     p {
-        padding: 10px;
+        padding: 4px;
+        font-size: 12px;
     }
 
     [contenteditable]:focus {
         outline: 2px solid #0078D4;
     }
-`
-
-const DescriptionTitle = styled.h2`
-
-`;
-
-
-const DescriptionTitleContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    border-bottom: 2px solid #ecedf1;
-    padding-bottom: 30px;
 `
 
 const RichTextContainer = styled.section`
@@ -212,15 +212,21 @@ const Circle = styled.section`
 
 const DescriptionHeader = styled.section`
     display: flex;
+    padding-right: 30px;
+    padding-left: 30px;
 `
 
 const Container = styled.section`
-    padding: 30px;
-    gap: 30px;
     display: flex;
     flex-direction: column;
     height: 100%;
-`
+`;
+
+const applyStyle = (editor: Editor, value: Object) => {
+    return {
+        background: editor.isFocused && editor.isActive(value) ? '#E5F1FB' : '#FFFFFF'
+    }
+}
 
 const richEditData: Array<RichEditProps> = [
     {
@@ -230,22 +236,14 @@ const richEditData: Array<RichEditProps> = [
                 handleClick: (editor) => {
                     editor.chain().focus().toggleBold().run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive('bold') ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, "bold")
             },
             {
                 icon: <ItalicIcon/>,
                 handleClick: editor => {
                     editor.chain().focus().toggleItalic().run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive('italic') ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, "italic")
             },
             {
                 icon: <div style={{
@@ -256,40 +254,28 @@ const richEditData: Array<RichEditProps> = [
                 handleClick: editor => {
                     editor.chain().focus().toggleUnderline().run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive('underline') ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, "underline")
             },
             {
                 icon: <TextStrikeIcon/>,
                 handleClick: editor => {
                     editor.chain().focus().toggleStrike().run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive('strike') ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, "strike")
             },
         ]
     },
     {
         components: [
-            {
-                icon: <LinkIcon/>,
-                handleClick: editor => {
-                    editor.chain().focus().toggleLink({
-                        href: "http",
-                    }).run();
-                },
-                styles: editor => {
-                    return {
-                        background: editor.isActive('link') ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
-            },
+            // {
+            //     icon: <LinkIcon/>,
+            //     handleClick: editor => {
+            //         editor.chain().focus().toggleLink({
+            //             href: "http",
+            //         }).run();
+            //     },
+            //     styles: editor => applyStyle(editor, "link")
+            // },
             // {
             //     icon: <ListIcon/>
             // },
@@ -302,33 +288,21 @@ const richEditData: Array<RichEditProps> = [
                 handleClick: editor => {
                     editor.chain().focus().toggleTextAlign('left').run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive({textAlign: 'left'}) ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, {textAlign: 'left'})
             },
             {
                 icon: <TextAlignCenter/>,
                 handleClick: editor => {
                     editor.chain().focus().toggleTextAlign('center').run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive({textAlign: 'center'}) ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, {textAlign: 'center'})
             },
             {
                 icon: <TextAlignRight/>,
                 handleClick: editor => {
                     editor.chain().focus().toggleTextAlign('right').run();
                 },
-                styles: editor => {
-                    return {
-                        background: editor.isActive({textAlign: 'right'}) ? '#E5F1FB' : '#FFFFFF'
-                    }
-                }
+                styles: editor => applyStyle(editor, {textAlign: 'right'})
             }
         ]
     },

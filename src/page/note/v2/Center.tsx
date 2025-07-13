@@ -65,10 +65,11 @@ export const Center = () => {
 }
 
 const CategoryText = styled.h3`
+    font-size: 16px;
 `
 
 const NoteItemContainer = styled.section`
-    height: calc(100vh - 290px);
+    height: calc(100vh - 250px);
 `
 
 
@@ -80,11 +81,11 @@ const NoteNumber = styled.span`
 const CreateNoteTypography = styled.span`
     color: #ffffff;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 12px;
 `
 
 const AddNote = styled.section`
-    height: 40px;
+    height: 35px;
     background-color: #0078D4;
     display: flex;
     justify-content: center;
@@ -107,7 +108,6 @@ const NoteFilteringSection = styled.section`
 const Container = styled.section`
     display: flex;
     flex-direction: column;
-    gap: 16px;
     width: 100%;
     border-right: 1px solid #ECEDF1;
 `
@@ -126,13 +126,14 @@ const NoteSearchSection = styled.input`
     box-sizing: border-box;
     border: 1px solid transparent;
     outline: none;
-    height: 42px;
+    height: 35px;
     padding-left: 20px;
     background-position: calc(100% - 20px);
     padding-right: 40px;
     width: 100%;
+    font-size: 12px;
 `;
 
 const Inner = styled.section`
-    padding: 20px;
- `
+    padding: 20px 20px 10px;
+`
